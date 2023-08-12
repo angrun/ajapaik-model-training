@@ -42,7 +42,7 @@ def categorize_uncategorized_images():
 
         images_ready_for_processing = ProcessingService.process(data)
         if not images_ready_for_processing:
-            print("get-uncategorized-images: No new images uncategorized images available\n")
+            print("get-uncategorized-images: No new uncategorized images available\n")
 
         else:
             for image in images_ready_for_processing:

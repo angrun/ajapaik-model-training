@@ -14,11 +14,9 @@ UNCATEGORIZED_IMAGES = "UNCATEGORIZED IMAGES"
 
 
 def aggregate_and_retrain_model():
-    print("Fetching categories aggregated data")
-
     response = requests.get(URL + 'object-categorization/aggregate-category-data')
     if response.status_code == 200:
-        print(f"aggregate-category-data: Aggregated data fetched successfully\n")
+        print(f"aggregate-category-data: Data for retraining fetched successfully\n")
 
         images_ready_for_processing = ProcessingService.process_images_for_retraining(response.content)
         if not images_ready_for_processing:
@@ -43,10 +41,14 @@ def categorize_uncategorized_images():
         data = response_data['data']  # [photo_id, user_id, photo_name]
 
         images_ready_for_processing = ProcessingService.process(data)
-        for image in images_ready_for_processing:
-            scene_prediction = ScenePrediction.predict(image)
-            image_to_send = ProcessingService.prepare_prediction_for_final_verdict(image, scene_prediction)
-            ProcessingService.batch_to_result_table(image_to_send)
+        if not images_ready_for_processing:
+            print("get-uncategorized-images: No new images uncategorized images available\n")
+
+        else:
+            for image in images_ready_for_processing:
+                scene_prediction = ScenePrediction.predict(image)
+                image_to_send = ProcessingService.prepare_prediction_for_final_verdict(image, scene_prediction)
+                ProcessingService.batch_to_result_table(image_to_send)
     else:
         print(f"Request failed with status code {response.status_code}")
         logger.info(f"Ung fetching failed with status code {response.status_code}")

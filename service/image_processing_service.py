@@ -66,7 +66,7 @@ class ProcessingService:
         response = requests.post(f"{THUMB_URL}{RESULT_PREFIX}", json=payload, headers=HEADERS)
 
         if response.status_code == 200:
-            print("Success!")
+            print("get-uncategorized-images: success posting categories for uncategorized images\n")
         else:
             print(f"Error: {response.status_code} - {response.text}")
 

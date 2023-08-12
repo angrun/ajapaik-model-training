@@ -56,4 +56,5 @@ class DataQuality:
         with open(report_filename, 'w') as report_file:
             report_file.writelines(report_lines)
 
+        print(f"aggregate-category-data: Finished data quality engine, removed {len(faulty_feedback)} faulty records")
         return cleaned_feedback

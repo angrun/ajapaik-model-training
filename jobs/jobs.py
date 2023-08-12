@@ -18,12 +18,11 @@ def aggregate_and_retrain_model():
 
     response = requests.get(URL + 'object-categorization/aggregate-category-data')
     if response.status_code == 200:
-        print(f"Aggregated data fetched successfuly")
-        print(f"{IMAGE_AGGREGATION}: Data fetched successfully")
+        print(f"aggregate-category-data: Aggregated data fetched successfully\n")
 
         images_ready_for_processing = ProcessingService.process_images_for_retraining(response.content)
         if not images_ready_for_processing:
-            print("No new images availbale for retraining process")
+            print("aggregate-category-data: No new images available for retraining process\n")
         else:
             # Filter out fraud predictions
             images_ready_for_processing = DataQuality.exclude_faulty_feedback(images_ready_for_processing)
@@ -35,7 +34,7 @@ def aggregate_and_retrain_model():
 
 
 def categorize_uncategorized_images():
-    print("Getting uncategorized images")
+    print("get-uncategorized-images: Getting uncategorized images\n")
 
     response = requests.get(URL + 'object-categorization/get-uncategorized-images')
     if response.status_code == 200:

@@ -1,4 +1,4 @@
-/reports
+/reports/*
 /resources/
 saved_model.h5
 db.sqlite3

@@ -14,8 +14,10 @@ class DataQuality:
             if user_id not in user_data:
                 user_data[user_id] = {'verdict_scene_0_count': 0, 'verdict_scene_1_count': 0}
             if entry.verdict_scene == 0:
+                print("VERDICT: 0")
                 user_data[user_id]['verdict_scene_0_count'] += 1
             else:
+                print("VERDICT: 1")
                 user_data[user_id]['verdict_scene_1_count'] += 1
 
         # Create features for anomaly detection

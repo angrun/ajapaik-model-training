@@ -155,7 +155,7 @@ class ScenePrediction:
 
         # Retrain the model
         ScenePrediction.model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
-        ScenePrediction.model.fit(new_images, new_labels, epochs=10,
+        ScenePrediction.model.fit(new_images, new_labels, epochs=20,
                                   validation_split=ScenePrediction.determine_validation(new_images))
 
         # Save the retrained model

@@ -5,6 +5,7 @@ import json
 from service.image_processing_service import ProcessingService
 from service.model.image_scene_model_prediction import ScenePrediction
 from service.quality.data_quality_engine import DataQuality
+from service.test.image_processing_service_test import ProcessingServiceTest
 
 logger = logging.getLogger(__name__)
 URL = 'http://localhost:8000/'
@@ -19,10 +20,12 @@ def aggregate_and_retrain_model():
         print(f"aggregate-category-data: Data for retraining fetched successfully\n")
 
         images_ready_for_processing = ProcessingService.process_images_for_retraining(response.content)
+        # images_ready_for_processing = ProcessingServiceTest.process_images_for_retraining()
         if not images_ready_for_processing:
             print("aggregate-category-data: No new images available for retraining process\n")
         else:
             # Filter out fraud predictions
+            print(f"aggregate-category-data: {len(images_ready_for_processing)} images taken for retraining")
             images_ready_for_processing = DataQuality.exclude_faulty_feedback(images_ready_for_processing)
             ScenePrediction.retrain_model(images_ready_for_processing)
 
@@ -45,6 +48,8 @@ def categorize_uncategorized_images():
             print("get-uncategorized-images: No new uncategorized images available\n")
 
         else:
+            print(
+                f"get-uncategorized-images: Received {len(images_ready_for_processing)} images for category predictions\n")
             for image in images_ready_for_processing:
                 scene_prediction = ScenePrediction.predict(image)
                 image_to_send = ProcessingService.prepare_prediction_for_final_verdict(image, scene_prediction)

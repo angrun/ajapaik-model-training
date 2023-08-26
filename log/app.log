@@ -1365,3 +1365,26 @@
 2023-08-12 15:44:25,325 django.utils.autoreload INFO     Watching for file changes with StatReloader
 2023-08-12 15:50:01,284 django.utils.autoreload INFO     Watching for file changes with StatReloader
 2023-08-12 15:51:04,405 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-08-26 12:02:58,564 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-08-26 12:05:26,291 django.utils.autoreload INFO     /Users/annagrund/PycharmProjects/ajapaik-model-training/jobs/jobs.py changed, reloading.
+2023-08-26 12:05:27,781 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-08-26 12:42:52,875 django.utils.autoreload INFO     /Users/annagrund/PycharmProjects/ajapaik-model-training/service/image_processing_service.py changed, reloading.
+2023-08-26 12:42:54,096 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-08-26 12:48:29,133 django.utils.autoreload INFO     /Users/annagrund/PycharmProjects/ajapaik-model-training/service/image_processing_service.py changed, reloading.
+2023-08-26 12:48:30,050 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-08-26 12:53:46,475 django.utils.autoreload INFO     /Users/annagrund/PycharmProjects/ajapaik-model-training/service/image_processing_service.py changed, reloading.
+2023-08-26 12:53:47,394 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-08-26 13:04:50,566 django.utils.autoreload INFO     /Users/annagrund/PycharmProjects/ajapaik-model-training/service/image_processing_service.py changed, reloading.
+2023-08-26 13:04:52,120 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-08-26 13:11:51,164 django.utils.autoreload INFO     /Users/annagrund/PycharmProjects/ajapaik-model-training/jobs/jobs.py changed, reloading.
+2023-08-26 13:11:52,367 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-08-26 13:14:45,182 django.utils.autoreload INFO     /Users/annagrund/PycharmProjects/ajapaik-model-training/service/test/image_processing_service_test.py changed, reloading.
+2023-08-26 13:14:46,361 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-08-26 13:14:54,026 django.utils.autoreload INFO     /Users/annagrund/PycharmProjects/ajapaik-model-training/service/test/image_processing_service_test.py changed, reloading.
+2023-08-26 13:14:54,636 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-08-26 13:19:02,152 django.utils.autoreload INFO     /Users/annagrund/PycharmProjects/ajapaik-model-training/service/test/image_processing_service_test.py changed, reloading.
+2023-08-26 13:19:02,879 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-08-26 13:23:34,059 django.utils.autoreload INFO     /Users/annagrund/PycharmProjects/ajapaik-model-training/service/test/image_processing_service_test.py changed, reloading.
+2023-08-26 13:23:35,531 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-08-26 13:25:01,231 django.utils.autoreload INFO     /Users/annagrund/PycharmProjects/ajapaik-model-training/service/test/image_processing_service_test.py changed, reloading.
+2023-08-26 13:28:47,448 django.utils.autoreload INFO     Watching for file changes with StatReloader

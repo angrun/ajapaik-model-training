@@ -42,6 +42,11 @@ class ProcessingService:
                     img_data = url_response.read()
                     processed_images.append(
                         ProcessingImage(user_id, image_id, img_data, verdict_scene=scene_alternative))
+        print("====")
+        print(processed_images)
+        with open("test.txt", "w") as f:
+            f.write(str(processed_images[0].image_for_processing))
+            f.close()
         return processed_images
 
     @staticmethod

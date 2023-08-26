@@ -92,7 +92,7 @@ class ScenePrediction:
                 ReduceLROnPlateau(factor=0.1, patience=2)
             ]
 
-            model.fit(train_generator, epochs=1, validation_data=val_generator, callbacks=callbacks)
+            model.fit(train_generator, epochs=20, validation_data=val_generator, callbacks=callbacks)
             ScenePrediction.model = model
             ScenePrediction.model.save(ScenePrediction.model_path)
 

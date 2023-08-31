@@ -1,0 +1,6 @@
+Report generated at: 2023-08-26 20:04:06
+
+Excluded data: [user_id: 1, image_id: 11, verdict_scene: 0], Anomaly value: 0.0
+Excluded data: [user_id: 2, image_id: 11, verdict_scene: 0], Anomaly value: 0.0
+Excluded data: [user_id: 3, image_id: 11, verdict_scene: 0], Anomaly value: 0.0
+Excluded data: [user_id: 4, image_id: 11, verdict_scene: 0], Anomaly value: 0.0

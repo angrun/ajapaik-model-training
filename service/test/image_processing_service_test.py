@@ -10,7 +10,7 @@ class ProcessingServiceTest:
     def process_images_for_retraining():
         THUMB_URL = "http://localhost:8000/"
         THUMB_PREFIX = "photo-thumb/"
-        image_id = 13
+        image_id = 14
         verdict_scene = 0
         url = f"{THUMB_URL}{THUMB_PREFIX}{image_id}"
         with urllib.request.urlopen(url) as url_response:
@@ -22,11 +22,11 @@ class ProcessingServiceTest:
             ProcessingImage(3, image_id, img_data, verdict_scene=verdict_scene),
             ProcessingImage(4, image_id, img_data, verdict_scene=verdict_scene),
             ProcessingImage(5, image_id, img_data, verdict_scene=verdict_scene),
-            ProcessingImage(6, image_id, img_data, verdict_scene=verdict_scene),
-            ProcessingImage(7, image_id, img_data, verdict_scene=verdict_scene),
-            ProcessingImage(8, image_id, img_data, verdict_scene=verdict_scene),
-            ProcessingImage(9, image_id, img_data, verdict_scene=verdict_scene),
-            ProcessingImage(10, image_id, img_data, verdict_scene=verdict_scene),
+            ProcessingImage(6, image_id, img_data, verdict_scene=1),
+            ProcessingImage(7, image_id, img_data, verdict_scene=1),
+            ProcessingImage(8, image_id, img_data, verdict_scene=1),
+            ProcessingImage(9, image_id, img_data, verdict_scene=1),
+            ProcessingImage(10, image_id, img_data, verdict_scene=1),
             ProcessingImage(11, image_id, img_data, verdict_scene=1),
             ProcessingImage(12, image_id, img_data, verdict_scene=1),
             ProcessingImage(13, image_id, img_data, verdict_scene=1),

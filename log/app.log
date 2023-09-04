@@ -1391,3 +1391,4 @@
 2023-08-26 20:01:07,611 django.utils.autoreload INFO     Watching for file changes with StatReloader
 2023-08-26 20:02:31,501 django.utils.autoreload INFO     /Users/annagrund/PycharmProjects/ajapaik-model-training/service/quality/data_quality_engine.py changed, reloading.
 2023-08-26 20:02:32,254 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-09-04 17:48:34,364 django.utils.autoreload INFO     Watching for file changes with StatReloader

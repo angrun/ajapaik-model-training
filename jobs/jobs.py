@@ -26,7 +26,7 @@ def aggregate_and_retrain_model():
         else:
             # Filter out fraud predictions
             print(f"aggregate-category-data: {len(images_ready_for_processing)} images taken for retraining")
-            images_ready_for_processing = DataQuality.exclude_faulty_feedback(images_ready_for_processing)
+            images_ready_for_processing = DataQuality.exclude_faulty_feedback_v1(images_ready_for_processing)
             ScenePrediction.retrain_model(images_ready_for_processing)
 
     else:

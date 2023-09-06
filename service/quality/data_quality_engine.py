@@ -35,7 +35,8 @@ class DataQuality:
             else:
                 removed_feedback.append(feedback)
 
-        print(f"DATA CLEAN UP PERFORMED, REMOVED {removed_feedback}")
+        print(f"DATA CLEAN UP PERFORMED, REMOVED {len(removed_feedback)}")
+        print(f"DATA CLEAN UP PERFORMED, CONSIDERING {len(cleanup_feedback)}")
         return cleanup_feedback
 
     # Version 2

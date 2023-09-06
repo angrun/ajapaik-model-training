@@ -10,7 +10,7 @@ class ProcessingServiceTest:
     def process_images_for_retraining():
         THUMB_URL = "http://localhost:8000/"
         THUMB_PREFIX = "photo-thumb/"
-        image_id = 21
+        image_id = 23
         verdict_scene_interior = 0
         url = f"{THUMB_URL}{THUMB_PREFIX}{image_id}"
         with urllib.request.urlopen(url) as url_response:
@@ -46,7 +46,7 @@ class ProcessingServiceTest:
             ProcessingImage(27, image_id, img_data, verdict_scene=verdict_scene_interior),
             ProcessingImage(28, image_id, img_data, verdict_scene=verdict_scene_interior),
             ProcessingImage(29, image_id, img_data, verdict_scene=verdict_scene_interior),
-            ProcessingImage(30, image_id, img_data, verdict_scene=1),
+            ProcessingImage(30, image_id, img_data, verdict_scene=verdict_scene_interior),
             ProcessingImage(31, image_id, img_data, verdict_scene=1),
             ProcessingImage(32, image_id, img_data, verdict_scene=1),
             ProcessingImage(33, image_id, img_data, verdict_scene=1),

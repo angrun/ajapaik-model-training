@@ -10,7 +10,7 @@ class ProcessingServiceTest:
     def process_images_for_retraining():
         THUMB_URL = "http://localhost:8000/"
         THUMB_PREFIX = "photo-thumb/"
-        image_id = 31
+        image_id = 33
         verdict_scene_interior = 0
         url = f"{THUMB_URL}{THUMB_PREFIX}{image_id}"
         with urllib.request.urlopen(url) as url_response:
@@ -27,15 +27,15 @@ class ProcessingServiceTest:
             ProcessingImage(8, image_id, img_data, verdict_scene=verdict_scene_interior),
             ProcessingImage(9, image_id, img_data, verdict_scene=verdict_scene_interior),
             ProcessingImage(10, image_id, img_data, verdict_scene=verdict_scene_interior),
-            ProcessingImage(11, image_id, img_data, verdict_scene=verdict_scene_interior),
-            ProcessingImage(12, image_id, img_data, verdict_scene=verdict_scene_interior),
-            ProcessingImage(13, image_id, img_data, verdict_scene=verdict_scene_interior),
-            ProcessingImage(14, image_id, img_data, verdict_scene=verdict_scene_interior),
-            ProcessingImage(15, image_id, img_data, verdict_scene=verdict_scene_interior),
-            ProcessingImage(16, image_id, img_data, verdict_scene=verdict_scene_interior),
-            ProcessingImage(17, image_id, img_data, verdict_scene=verdict_scene_interior),
-            ProcessingImage(18, image_id, img_data, verdict_scene=verdict_scene_interior),
-            ProcessingImage(19, image_id, img_data, verdict_scene=verdict_scene_interior),
+            ProcessingImage(11, image_id, img_data, verdict_scene=1),
+            ProcessingImage(12, image_id, img_data, verdict_scene=1),
+            ProcessingImage(13, image_id, img_data, verdict_scene=1),
+            ProcessingImage(14, image_id, img_data, verdict_scene=1),
+            ProcessingImage(15, image_id, img_data, verdict_scene=1),
+            ProcessingImage(16, image_id, img_data, verdict_scene=1),
+            ProcessingImage(17, image_id, img_data, verdict_scene=1),
+            ProcessingImage(18, image_id, img_data, verdict_scene=1),
+            ProcessingImage(19, image_id, img_data, verdict_scene=1),
             ProcessingImage(20, image_id, img_data, verdict_scene=1),
             ProcessingImage(21, image_id, img_data, verdict_scene=1),
             ProcessingImage(22, image_id, img_data, verdict_scene=1),

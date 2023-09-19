@@ -164,7 +164,7 @@ class ProcessingServiceTest:
                     if verdict_fo_exterior == 1:
                         interior["interior_wrong"] = interior["interior_wrong"] + 1
                     else:
-                        interior["interior_correct"] = exterior["interior_correct"] + 1
+                        interior["interior_correct"] = interior["interior_correct"] + 1
                     result.append(
                         ProcessingImage(user_id, image_id_interior_from, img_data, verdict_scene=verdict_fo_interior))
             except Exception:

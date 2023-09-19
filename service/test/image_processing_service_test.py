@@ -147,8 +147,8 @@ class ProcessingServiceTest:
                         exterior["exterior_correct"] = exterior["exterior_correct"] + 1
                     result.append(
                         ProcessingImage(user_id, image_id_exterior_from, img_data, verdict_scene=verdict_fo_exterior))
-            except Exception:
-                print("Caught exception")
+            except Exception as e:
+                print("Caught exception " + e)
             image_id_exterior_from += 1
             user_id += 1
 

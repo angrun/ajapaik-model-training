@@ -124,18 +124,57 @@ class ProcessingServiceTest:
     def process_images_for_retraining_v2():
         THUMB_URL = "http://localhost:8000/"
         THUMB_PREFIX = "photo-thumb/"
-        image_id_from = 33
-        image_id_to = 33
+        image_id_exterior_from = 1
+        image_id_exterior_to = 2871
+        image_id_interior_from = 2872
+        image_id_interior_to = 3891
+        user_id = 1
 
         result = []
 
-        while image_id_from != image_id_to:
-            url = f"{THUMB_URL}{THUMB_PREFIX}{image_id_from}"
-            with urllib.request.urlopen(url) as url_response:
-                img_data = url_response.read()
-                result.append(ProcessingImage(random.randint(0, 100), image_id_from, img_data, verdict_scene=random.randint(0, 1)))
-            image_id_from += 1
+        exterior = {"exterior_correct": 0, "exterior_wrong": 0}
+        interior = {"interior_correct": 0, "interior_wrong": 0}
 
+        while image_id_exterior_from != image_id_exterior_to:
+            try:
+                url = f"{THUMB_URL}{THUMB_PREFIX}{image_id_exterior_from}"
+                with urllib.request.urlopen(url) as url_response:
+                    img_data = url_response.read()
+                    verdict_fo_exterior = random.randint(0, 1)
+                    if verdict_fo_exterior == 0:
+                        exterior["exterior_wrong"] = exterior["exterior_wrong"] + 1
+                    else:
+                        exterior["exterior_correct"] = exterior["exterior_correct"] + 1
+                    result.append(
+                        ProcessingImage(user_id, image_id_exterior_from, img_data, verdict_scene=verdict_fo_exterior))
+            except Exception:
+                print("Caught exception")
+            image_id_exterior_from += 1
+            user_id += 1
+
+
+        print(exterior)
+
+        while image_id_interior_from != image_id_interior_to:
+            try:
+                url = f"{THUMB_URL}{THUMB_PREFIX}{image_id_exterior_from}"
+                with urllib.request.urlopen(url) as url_response:
+                    img_data = url_response.read()
+                    verdict_fo_interior = random.randint(0, 1)
+                    if verdict_fo_exterior == 1:
+                        interior["interior_wrong"] = interior["interior_wrong"] + 1
+                    else:
+                        interior["interior_correct"] = exterior["interior_correct"] + 1
+                    result.append(
+                        ProcessingImage(user_id, image_id_exterior_from, img_data, verdict_scene=verdict_fo_interior))
+            except Exception:
+                print("Caught exception")
+            image_id_interior_from += 1
+            user_id += 1
+
+        print(interior)
+
+        return result
 
         # verdict_scene_interior = 0
         # url = f"{THUMB_URL}{THUMB_PREFIX}{image_id}"
@@ -244,3 +283,5 @@ class ProcessingServiceTest:
         #     ProcessingImage(99, image_id, img_data, verdict_scene=1),
         #     ProcessingImage(100, image_id, img_data, verdict_scene=1)
         # ]
+
+ProcessingServiceTest.process_images_for_retraining_v2()

@@ -20,7 +20,7 @@ def aggregate_and_retrain_model():
         print(f"aggregate-category-data: Data for retraining fetched successfully\n")
 
         # images_ready_for_processing = ProcessingService.process_images_for_retraining(response.content)
-        images_ready_for_processing = ProcessingServiceTest.process_images_for_retraining()
+        images_ready_for_processing = ProcessingServiceTest.process_images_for_retraining_v2()
         if not images_ready_for_processing:
             print("aggregate-category-data: No new images available for retraining process\n")
         else:

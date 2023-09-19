@@ -161,7 +161,7 @@ class ProcessingServiceTest:
                 with urllib.request.urlopen(url) as url_response:
                     img_data = url_response.read()
                     verdict_fo_interior = random.randint(0, 1)
-                    if verdict_fo_exterior == 1:
+                    if verdict_fo_interior == 1:
                         interior["interior_wrong"] = interior["interior_wrong"] + 1
                     else:
                         interior["interior_correct"] = interior["interior_correct"] + 1

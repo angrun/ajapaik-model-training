@@ -157,7 +157,7 @@ class ProcessingServiceTest:
 
         while image_id_interior_from != image_id_interior_to:
             try:
-                url = f"{THUMB_URL}{THUMB_PREFIX}{image_id_exterior_from}"
+                url = f"{THUMB_URL}{THUMB_PREFIX}{image_id_interior_from}"
                 with urllib.request.urlopen(url) as url_response:
                     img_data = url_response.read()
                     verdict_fo_interior = random.randint(0, 1)
@@ -166,7 +166,7 @@ class ProcessingServiceTest:
                     else:
                         interior["interior_correct"] = exterior["interior_correct"] + 1
                     result.append(
-                        ProcessingImage(user_id, image_id_exterior_from, img_data, verdict_scene=verdict_fo_interior))
+                        ProcessingImage(user_id, image_id_interior_from, img_data, verdict_scene=verdict_fo_interior))
             except Exception:
                 print("Caught exception")
             image_id_interior_from += 1

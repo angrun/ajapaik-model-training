@@ -125,9 +125,9 @@ class ProcessingServiceTest:
         THUMB_URL = "http://localhost:8000/"
         THUMB_PREFIX = "photo-thumb/"
         image_id_exterior_from = 1
-        image_id_exterior_to = 2871
-        image_id_interior_from = 2872
-        image_id_interior_to = 3891
+        image_id_exterior_to = 1019
+        image_id_interior_from = 1020
+        image_id_interior_to = 2038
         user_id = 1
 
         result = []

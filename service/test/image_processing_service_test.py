@@ -284,4 +284,3 @@ class ProcessingServiceTest:
         #     ProcessingImage(100, image_id, img_data, verdict_scene=1)
         # ]
 
-ProcessingServiceTest.process_images_for_retraining_v2()

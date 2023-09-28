@@ -152,7 +152,6 @@ class ProcessingServiceTest:
             image_id_exterior_from += 1
             user_id += 1
 
-
         print(exterior)
 
         while image_id_interior_from != image_id_interior_to:
@@ -176,111 +175,58 @@ class ProcessingServiceTest:
 
         return result
 
-        # verdict_scene_interior = 0
-        # url = f"{THUMB_URL}{THUMB_PREFIX}{image_id}"
-        # with urllib.request.urlopen(url) as url_response:
-        #     img_data = url_response.read()
+    @staticmethod
+    def process_images_for_retraining_v3():
+        THUMB_URL = "http://localhost:8000/"
+        THUMB_PREFIX = "photo-thumb/"
+        image_id_exterior_from = random.randint(1, 1019)
+        image_id_interior_from = random.randint(1020, 2038)
+        user_id = random.randint(1, 100)
+        counter = 0
 
-        # return [
-        #     ProcessingImage(1, image_id, img_data, verdict_scene=verdict_scene_interior),
-        #     ProcessingImage(2, image_id, img_data, verdict_scene=verdict_scene_interior),
-        #     ProcessingImage(3, image_id, img_data, verdict_scene=verdict_scene_interior),
-        #     ProcessingImage(4, image_id, img_data, verdict_scene=verdict_scene_interior),
-        #     ProcessingImage(5, image_id, img_data, verdict_scene=verdict_scene_interior),
-        #     ProcessingImage(6, image_id, img_data, verdict_scene=verdict_scene_interior),
-        #     ProcessingImage(7, image_id, img_data, verdict_scene=verdict_scene_interior),
-        #     ProcessingImage(8, image_id, img_data, verdict_scene=verdict_scene_interior),
-        #     ProcessingImage(9, image_id, img_data, verdict_scene=verdict_scene_interior),
-        #     ProcessingImage(10, image_id, img_data, verdict_scene=verdict_scene_interior),
-        #     ProcessingImage(11, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(12, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(13, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(14, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(15, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(16, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(17, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(18, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(19, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(20, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(21, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(22, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(23, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(24, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(25, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(26, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(27, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(28, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(29, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(30, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(31, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(32, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(33, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(34, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(35, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(36, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(37, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(38, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(39, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(40, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(41, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(42, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(43, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(44, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(45, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(46, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(47, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(48, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(49, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(50, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(51, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(52, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(53, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(54, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(55, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(56, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(57, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(58, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(59, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(60, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(61, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(62, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(63, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(64, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(65, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(66, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(67, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(68, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(69, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(70, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(71, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(72, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(73, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(74, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(75, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(76, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(77, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(78, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(79, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(80, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(81, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(82, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(83, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(84, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(85, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(86, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(87, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(88, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(89, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(90, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(91, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(92, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(93, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(94, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(95, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(96, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(97, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(98, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(99, image_id, img_data, verdict_scene=1),
-        #     ProcessingImage(100, image_id, img_data, verdict_scene=1)
-        # ]
+        result = []
 
+        exterior = {"exterior_correct": 0, "exterior_wrong": 0}
+        interior = {"interior_correct": 0, "interior_wrong": 0}
+
+        while counter != 10000:
+            try:
+                url = f"{THUMB_URL}{THUMB_PREFIX}{image_id_exterior_from}"
+                with urllib.request.urlopen(url) as url_response:
+                    img_data = url_response.read()
+                    verdict_fo_exterior = random.randint(0, 1)
+                    if verdict_fo_exterior == 0:
+                        exterior["exterior_wrong"] = exterior["exterior_wrong"] + 1
+                    else:
+                        exterior["exterior_correct"] = exterior["exterior_correct"] + 1
+                    result.append(
+                        ProcessingImage(user_id, image_id_exterior_from, img_data, verdict_scene=verdict_fo_exterior))
+            except Exception as e:
+                pass
+            counter += 1
+            image_id_exterior_from = random.randint(1, 1019)
+            user_id = random.randint(1, 100)
+
+        print(exterior)
+        counter = 0
+
+        while counter != 10000:
+            try:
+                url = f"{THUMB_URL}{THUMB_PREFIX}{image_id_interior_from}"
+                with urllib.request.urlopen(url) as url_response:
+                    img_data = url_response.read()
+                    verdict_fo_interior = random.randint(0, 1)
+                    if verdict_fo_interior == 1:
+                        interior["interior_wrong"] = interior["interior_wrong"] + 1
+                    else:
+                        interior["interior_correct"] = interior["interior_correct"] + 1
+                    result.append(
+                        ProcessingImage(user_id, image_id_interior_from, img_data, verdict_scene=verdict_fo_interior))
+            except Exception:
+                print("Caught exception")
+            image_id_interior_from = random.randint(1020, 2038)
+            user_id = random.randint(1, 100)
+
+        print(interior)
+
+        return result

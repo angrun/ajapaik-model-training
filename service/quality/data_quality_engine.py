@@ -21,8 +21,6 @@ class DataQuality:
             verdict = feedback.verdict_scene
             verdict_counts_per_image[image_id][verdict] += 1
 
-        print("===")
-        print(verdict_counts_per_image)
         most_common_verdicts = {}
         for image_id, verdict_counts in verdict_counts_per_image.items():
             most_common_verdicts[image_id] = verdict_counts.most_common(1)[0][0]

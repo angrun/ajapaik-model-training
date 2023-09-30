@@ -224,6 +224,7 @@ class ProcessingServiceTest:
                         ProcessingImage(user_id, image_id_interior_from, img_data, verdict_scene=verdict_fo_interior))
             except Exception:
                 print("Caught exception")
+            counter += 1
             image_id_interior_from = random.randint(1020, 2038)
             user_id = random.randint(1, 100)
 

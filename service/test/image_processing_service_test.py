@@ -222,7 +222,8 @@ class ProcessingServiceTest:
                     result.append(
                         ProcessingImage(user_id, image_id_exterior_from, img_data, verdict_scene=verdict_fo_exterior))
             except Exception as e:
-                pass
+                print(e)
+                print("EXCEPTION")
             counter += 1
             image_id_exterior_from = random.randint(1, 1019)
             user_id = random.randint(1, 100)

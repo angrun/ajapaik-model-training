@@ -5,9 +5,6 @@ import urllib.request
 import random
 
 
-# collections = {"exterior_012": {"feedback_count": 0, "exterior": 0, "interior": 0}}
-
-
 def handle_processed_image(collections, category, image_id, verdict):
     item = category + "_" + str(image_id)
     if item not in collections.keys():
@@ -16,8 +13,7 @@ def handle_processed_image(collections, category, image_id, verdict):
         collections[item][verdict] = collections[item][verdict] + 1
     else:
         collections[item]["feedback_count"] = collections[item]["feedback_count"] + 1
-        collections[item]["feedback_count"] = collections[item][verdict] + 1
-    print(collections)
+        collections[item][verdict] = collections[item][verdict] + 1
 
 
 class ProcessingServiceTest:
@@ -137,6 +133,7 @@ class ProcessingServiceTest:
 
     @staticmethod
     def process_images_for_retraining_v2():
+        uniqueness_check = []
         THUMB_URL = "http://localhost:8000/"
         THUMB_PREFIX = "photo-thumb/"
         image_id_exterior_from = 1
@@ -192,6 +189,8 @@ class ProcessingServiceTest:
 
     @staticmethod
     def process_images_for_retraining_v3():
+        uniqueness_check = []
+
         THUMB_URL = "http://localhost:8000/"
         THUMB_PREFIX = "photo-thumb/"
         image_id_exterior_from = random.randint(1, 1019)
@@ -207,6 +206,13 @@ class ProcessingServiceTest:
 
         while counter != 10000:
             try:
+                # Ensure only 1 feedback per image from a user
+                if (user_id, image_id_exterior_from) in uniqueness_check:
+                    print("Uniqueness break")
+                    continue
+                else:
+                    uniqueness_check.append((user_id, image_id_exterior_from))
+
                 url = f"{THUMB_URL}{THUMB_PREFIX}{image_id_exterior_from}"
                 with urllib.request.urlopen(url) as url_response:
                     img_data = url_response.read()
@@ -233,10 +239,20 @@ class ProcessingServiceTest:
 
         while counter != 10000:
             try:
+                if (user_id, image_id_exterior_from) in uniqueness_check:
+                    print("Uniqueness break")
+                    continue
+                else:
+                    uniqueness_check.append((user_id, image_id_exterior_from))
+
                 url = f"{THUMB_URL}{THUMB_PREFIX}{image_id_interior_from}"
                 with urllib.request.urlopen(url) as url_response:
                     img_data = url_response.read()
                     verdict_fo_interior = random.randint(0, 1)
+
+                    handle_processed_image(collections, "interior", image_id_exterior_from,
+                                           "exterior" if verdict_fo_exterior == 1 else "interior")
+
                     if verdict_fo_interior == 1:
                         interior["interior_wrong"] = interior["interior_wrong"] + 1
                     else:

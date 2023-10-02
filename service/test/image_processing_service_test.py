@@ -5,18 +5,18 @@ import urllib.request
 import random
 
 
-# collections = {"exterior": {"image_id": 0, "data": {"feedback_count": 0, "exterior": 0, "interior": 0}},
-#                "interior": {"image_id": 0, "data": {"feedback_count": 0, "exterior": 0, "interior": 0}}}
+# collections = {"exterior_012": {"feedback_count": 0, "exterior": 0, "interior": 0}}
 
 
 def handle_processed_image(collections, category, image_id, verdict):
-    if collections[category]["image_id"] != 0:
-        collections[category]["data"]["feedback_count"] = collections[category]["data"]["feedback_count"] + 1
-        collections[category]["data"]["feedback_count"] = collections[category]["data"][verdict] + 1
+    item = category + "_" + image_id
+    if item not in collections.keys():
+        collections[item] = {"feedback_count": 0, "exterior": 0, "interior": 0}
+        collections[item]["feedback_count"] = collections[item]["feedback_count"] + 1
+        collections[item][verdict] = collections[item][verdict] + 1
     else:
-        collections[category]["image_id"] = image_id
-        collections[category]["data"]["feedback_count"] = collections[category]["data"]["feedback_count"] + 1
-        collections[category]["data"]["feedback_count"] = collections[category]["data"][verdict] + 1
+        collections[item]["feedback_count"] = collections[item]["feedback_count"] + 1
+        collections[item]["feedback_count"] = collections[item][verdict] + 1
 
 
 class ProcessingServiceTest:
@@ -187,7 +187,7 @@ class ProcessingServiceTest:
 
         print(interior)
 
-        return result, collections
+        return result
 
     @staticmethod
     def process_images_for_retraining_v3():
@@ -199,8 +199,7 @@ class ProcessingServiceTest:
         counter = 0
 
         result = []
-        collections = {"exterior": {"image_id": 0, "data": {"feedback_count": 0, "exterior": 0, "interior": 0}},
-                       "interior": {"image_id": 0, "data": {"feedback_count": 0, "exterior": 0, "interior": 0}}}
+        collections = {}
 
         exterior = {"exterior_correct": 0, "exterior_wrong": 0}
         interior = {"interior_correct": 0, "interior_wrong": 0}

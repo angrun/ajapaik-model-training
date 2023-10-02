@@ -17,6 +17,7 @@ def handle_processed_image(collections, category, image_id, verdict):
     else:
         collections[item]["feedback_count"] = collections[item]["feedback_count"] + 1
         collections[item]["feedback_count"] = collections[item][verdict] + 1
+    print(collections)
 
 
 class ProcessingServiceTest:

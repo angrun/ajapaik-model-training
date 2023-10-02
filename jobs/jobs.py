@@ -6,6 +6,7 @@ from service.image_processing_service import ProcessingService
 from service.model.image_scene_model_prediction import ScenePrediction
 from service.quality.data_quality_engine import DataQuality
 from service.test.image_processing_service_test import ProcessingServiceTest
+from service.validation.data_quality_validation_service import DataQualityValidation
 
 logger = logging.getLogger(__name__)
 URL = 'http://localhost:8000/'
@@ -20,13 +21,24 @@ def aggregate_and_retrain_model():
         print(f"aggregate-category-data: Data for retraining fetched successfully\n")
 
         # images_ready_for_processing = ProcessingService.process_images_for_retraining(response.content)
-        images_ready_for_processing = ProcessingServiceTest.process_images_for_retraining_v3()
+        processed_images = ProcessingServiceTest.process_images_for_retraining_v3()
+
+        images_ready_for_processing = processed_images[0]
+        collected_report = processed_images[1]
         if not images_ready_for_processing:
             print("aggregate-category-data: No new images available for retraining process\n")
         else:
             # Filter out fraud predictions
             print(f"aggregate-category-data: {len(images_ready_for_processing)} images taken for retraining")
-            images_ready_for_processing = DataQuality.exclude_faulty_feedback_v1(images_ready_for_processing)
+
+            images_processed_through_data_quality_engine = DataQuality.exclude_faulty_feedback_v1(images_ready_for_processing)
+
+            images_ready_for_processing = images_processed_through_data_quality_engine[0]
+            images_excluded = images_processed_through_data_quality_engine[1]
+
+            # REPORT
+            DataQualityValidation.prepare_report(collected_report, images_excluded)
+
             print(
                 f"aggregate-category-data {len(images_ready_for_processing)} images taken for retraining after quality engine")
             ScenePrediction.retrain_model(images_ready_for_processing)

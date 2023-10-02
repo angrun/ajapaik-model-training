@@ -35,7 +35,7 @@ class DataQuality:
 
         print(f"DATA CLEAN UP PERFORMED, REMOVED {len(removed_feedback)}")
         print(f"DATA CLEAN UP PERFORMED, CONSIDERING {len(cleanup_feedback)}")
-        return cleanup_feedback
+        return cleanup_feedback, removed_feedback
 
     # Version 2
     @staticmethod

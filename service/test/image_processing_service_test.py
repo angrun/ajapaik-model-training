@@ -9,7 +9,7 @@ import random
 
 
 def handle_processed_image(collections, category, image_id, verdict):
-    item = category + "_" + image_id
+    item = category + "_" + str(image_id)
     if item not in collections.keys():
         collections[item] = {"feedback_count": 0, "exterior": 0, "interior": 0}
         collections[item]["feedback_count"] = collections[item]["feedback_count"] + 1

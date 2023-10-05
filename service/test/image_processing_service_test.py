@@ -244,20 +244,20 @@ class ProcessingServiceTest:
             image_id_interior_from = random.randint(1020, 2038)
             user_id = random.randint(1, 100)
             try:
-                if [user_id, image_id_exterior_from] in uniqueness_check:
+                if [user_id, image_id_interior_from] in uniqueness_check:
                     print("INTERIOR: Uniqueness break")
                     print([user_id, image_id_exterior_from])
                     print(uniqueness_check)
                     continue
                 else:
-                    uniqueness_check.append([user_id, image_id_exterior_from])
+                    uniqueness_check.append([user_id, image_id_interior_from])
 
                 url = f"{THUMB_URL}{THUMB_PREFIX}{image_id_interior_from}"
                 with urllib.request.urlopen(url) as url_response:
                     img_data = url_response.read()
                     verdict_fo_interior = random.randint(0, 1)
 
-                    handle_processed_image(collections, "interior", image_id_exterior_from,
+                    handle_processed_image(collections, "interior", image_id_interior_from,
                                            "exterior" if verdict_fo_exterior == 1 else "interior")
 
                     if verdict_fo_interior == 1:

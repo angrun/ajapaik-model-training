@@ -211,6 +211,8 @@ class ProcessingServiceTest:
                 # Ensure only 1 feedback per image from a user
                 if [user_id, image_id_exterior_from] in uniqueness_check:
                     print("Uniqueness break")
+                    print(uniqueness_check)
+                    print([user_id, image_id_exterior_from])
                     continue
                 else:
                     uniqueness_check.append([user_id, image_id_exterior_from])

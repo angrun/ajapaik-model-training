@@ -40,6 +40,8 @@ def aggregate_and_retrain_model():
             DataQualityValidation.prepare_report(collected_report, images_excluded)
 
             print(
+                f"aggregate-category-data {len(images_excluded)} images EXCLUDED")
+            print(
                 f"aggregate-category-data {len(images_ready_for_processing)} images taken for retraining after quality engine")
             ScenePrediction.retrain_model(images_ready_for_processing)
 

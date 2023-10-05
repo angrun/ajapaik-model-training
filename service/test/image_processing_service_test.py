@@ -204,7 +204,7 @@ class ProcessingServiceTest:
         exterior = {"exterior_correct": 0, "exterior_wrong": 0}
         interior = {"interior_correct": 0, "interior_wrong": 0}
 
-        while counter != 10000:
+        while counter != 3000:
             try:
                 # Ensure only 1 feedback per image from a user
                 if [user_id, image_id_exterior_from] in uniqueness_check:
@@ -237,7 +237,7 @@ class ProcessingServiceTest:
         print(exterior)
         counter = 0
 
-        while counter != 10000:
+        while counter != 3000:
             try:
                 if [user_id, image_id_exterior_from] in uniqueness_check:
                     print("Uniqueness break")

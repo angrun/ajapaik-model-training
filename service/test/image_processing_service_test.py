@@ -204,7 +204,7 @@ class ProcessingServiceTest:
         exterior = {"exterior_correct": 0, "exterior_wrong": 0}
         interior = {"interior_correct": 0, "interior_wrong": 0}
 
-        while counter != 250:
+        while counter != 750:
             image_id_exterior_from = random.randint(1, 1019)
             user_id = random.randint(1, 100)
             try:
@@ -240,7 +240,7 @@ class ProcessingServiceTest:
         print(exterior)
         counter = 0
 
-        while counter != 250:
+        while counter != 750:
             image_id_interior_from = random.randint(1020, 2038)
             user_id = random.randint(1, 100)
             try:

@@ -210,7 +210,7 @@ class ProcessingServiceTest:
             try:
                 # Ensure only 1 feedback per image from a user
                 if [user_id, image_id_exterior_from] in uniqueness_check:
-                    print("Uniqueness break")
+                    print("EXTERIOR: Uniqueness break")
                     print(uniqueness_check)
                     print([user_id, image_id_exterior_from])
                     continue
@@ -245,7 +245,9 @@ class ProcessingServiceTest:
             user_id = random.randint(1, 100)
             try:
                 if [user_id, image_id_exterior_from] in uniqueness_check:
-                    print("Uniqueness break")
+                    print("INTERIOR: Uniqueness break")
+                    print([user_id, image_id_exterior_from])
+                    print(uniqueness_check)
                     continue
                 else:
                     uniqueness_check.append([user_id, image_id_exterior_from])

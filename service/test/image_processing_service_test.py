@@ -207,11 +207,11 @@ class ProcessingServiceTest:
         while counter != 10000:
             try:
                 # Ensure only 1 feedback per image from a user
-                if (user_id, image_id_exterior_from) in uniqueness_check:
+                if [user_id, image_id_exterior_from] in uniqueness_check:
                     print("Uniqueness break")
                     continue
                 else:
-                    uniqueness_check.append((user_id, image_id_exterior_from))
+                    uniqueness_check.append([user_id, image_id_exterior_from])
 
                 url = f"{THUMB_URL}{THUMB_PREFIX}{image_id_exterior_from}"
                 with urllib.request.urlopen(url) as url_response:
@@ -239,11 +239,11 @@ class ProcessingServiceTest:
 
         while counter != 10000:
             try:
-                if (user_id, image_id_exterior_from) in uniqueness_check:
+                if [user_id, image_id_exterior_from] in uniqueness_check:
                     print("Uniqueness break")
                     continue
                 else:
-                    uniqueness_check.append((user_id, image_id_exterior_from))
+                    uniqueness_check.append([user_id, image_id_exterior_from])
 
                 url = f"{THUMB_URL}{THUMB_PREFIX}{image_id_interior_from}"
                 with urllib.request.urlopen(url) as url_response:

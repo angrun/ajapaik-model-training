@@ -205,6 +205,8 @@ class ProcessingServiceTest:
         interior = {"interior_correct": 0, "interior_wrong": 0}
 
         while counter != 3000:
+            image_id_exterior_from = random.randint(1, 1019)
+            user_id = random.randint(1, 100)
             try:
                 # Ensure only 1 feedback per image from a user
                 if [user_id, image_id_exterior_from] in uniqueness_check:
@@ -231,13 +233,14 @@ class ProcessingServiceTest:
                 print(e)
                 print("EXCEPTION")
             counter += 1
-            image_id_exterior_from = random.randint(1, 1019)
-            user_id = random.randint(1, 100)
+
 
         print(exterior)
         counter = 0
 
         while counter != 3000:
+            image_id_interior_from = random.randint(1020, 2038)
+            user_id = random.randint(1, 100)
             try:
                 if [user_id, image_id_exterior_from] in uniqueness_check:
                     print("Uniqueness break")
@@ -262,8 +265,6 @@ class ProcessingServiceTest:
             except Exception:
                 print("Caught exception")
             counter += 1
-            image_id_interior_from = random.randint(1020, 2038)
-            user_id = random.randint(1, 100)
 
         print(interior)
 

@@ -15,20 +15,21 @@ class DataQualityValidation:
         for feedback in all_feedbacks:
             category = feedback.split("_")[0]
             image_id = int(feedback.split("_")[1])
-            print(feedback)
+
             # EXCLUDED FLOW
             if image_id in [el.image_id for el in cleaned_up_feedbacks]:
-                print(cleaned_up_feedbacks)
-                if category == "interior":
-                    print("CATEGORY INTERIOR")
-
-                if category == "exterior" and all_feedbacks[feedback]["interior"] >= all_feedbacks[feedback]["exterior"]:
+                if category == "exterior" and all_feedbacks[feedback]["interior"] > all_feedbacks[feedback]["exterior"]:
                     false_negative += 1
-                elif category == "exterior" and all_feedbacks[feedback]["interior"] < all_feedbacks[feedback]["exterior"]:
+                elif category == "exterior" and all_feedbacks[feedback]["interior"] <= all_feedbacks[feedback]["exterior"]:
+                    true_negative += 1
+                elif category == "interior" and all_feedbacks[feedback]["exterior"] > all_feedbacks[feedback]["interior"]:
+                    false_negative += 1
+                elif category == "interior" and all_feedbacks[feedback]["exterior"] <= all_feedbacks[feedback]["interior"]:
                     true_negative += 1
                 else:
-                    print("NOT HANDLED EXCLUSION")
+                    print("NOT HANDLED")
                     print(feedback)
+                    print(all_feedbacks[feedback])
             else:
                 # No exclusion as interior was 0
                 if category == "exterior" and all_feedbacks[feedback]["interior"] != 0:
@@ -36,6 +37,11 @@ class DataQualityValidation:
 
                 elif category == "exterior" and all_feedbacks[feedback]["interior"] == 0:
                     true_positive += 1
+                elif category == "interior" and all_feedbacks[feedback]["exterior"] != 0:
+                    false_positive += 1
+                elif category == "interior" and all_feedbacks[feedback]["exterior"] == 0:
+                    true_positive += 1
+
                 else:
                     print("NOT HANDLED")
                     print(feedback)

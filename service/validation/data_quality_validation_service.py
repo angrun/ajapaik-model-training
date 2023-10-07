@@ -18,7 +18,7 @@ class DataQualityValidation:
 
             # EXCLUDED FLOW
             if image_id in [el.user_id for el in cleaned_up_feedbacks]:
-                print(category)
+                print(cleaned_up_feedbacks)
                 if category == "interior":
                     print("CATEGORY INTERIOR")
 

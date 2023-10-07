@@ -12,8 +12,6 @@ class DataQuality:
     # Version 1
     @staticmethod
     def exclude_faulty_feedback_v1(user_feedback):
-        print("USER FEEDBACK")
-        print(user_feedback)
         verdict_counts_per_image = defaultdict(Counter)
 
         for feedback in user_feedback:

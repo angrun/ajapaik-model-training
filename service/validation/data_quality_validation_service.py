@@ -5,7 +5,7 @@ class DataQualityValidation:
     @staticmethod
     def prepare_report(all_feedbacks: dict, cleaned_up_feedbacks: list):
         print("Preparing the report")
-        print(all_feedbacks)
+        print(len(all_feedbacks))
 
         true_positive = 0
         true_negative = 0
@@ -46,11 +46,11 @@ class DataQualityValidation:
                     print("NOT HANDLED")
                     print(feedback)
 
+
         print("TRUE POSITIVE: " + str(true_positive))
         print("TRUE NEGATIVE: " + str(true_negative))
         print("FALSE POSITIVE: " + str(false_positive))
         print("FALSE NEGATIVE: " + str(false_negative))
-
 
     @staticmethod
     def get_image_id(image_category_id):

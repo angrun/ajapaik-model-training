@@ -25,6 +25,10 @@ class DataQuality:
         for image_id, verdict_counts in verdict_counts_per_image.items():
             most_common_verdicts[image_id] = verdict_counts.most_common(1)[0][0]
 
+
+        print("MOST COMMON VERDICTS")
+        print(most_common_verdicts)
+
         cleanup_feedback = []
         removed_feedback = []
         for feedback in user_feedback:

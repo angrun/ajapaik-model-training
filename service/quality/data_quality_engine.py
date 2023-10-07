@@ -29,6 +29,9 @@ class DataQuality:
         removed_feedback = []
         for feedback in user_feedback:
             if most_common_verdicts[feedback.image_id] == feedback.verdict_scene:
+                print("===")
+                print(most_common_verdicts[feedback.image_id])
+                print(feedback.verdict_scene)
                 cleanup_feedback.append(feedback)
             else:
                 removed_feedback.append(feedback)

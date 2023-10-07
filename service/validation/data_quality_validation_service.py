@@ -19,13 +19,13 @@ class DataQualityValidation:
             # EXCLUDED FLOW
             if image_id in [el.image_id for el in cleaned_up_feedbacks]:
                 if category == "exterior" and all_feedbacks[feedback]["interior"] > all_feedbacks[feedback]["exterior"]:
-                    false_negative += all_feedbacks[feedback]["interior"]
+                    false_negative += all_feedbacks[feedback]["feedback_count"]
                 elif category == "exterior" and all_feedbacks[feedback]["interior"] <= all_feedbacks[feedback]["exterior"]:
-                    true_negative += all_feedbacks[feedback]["interior"]
+                    true_negative += all_feedbacks[feedback]["feedback_count"]
                 elif category == "interior" and all_feedbacks[feedback]["exterior"] > all_feedbacks[feedback]["interior"]:
-                    false_negative += all_feedbacks[feedback]["exterior"]
+                    false_negative += all_feedbacks[feedback]["feedback_count"]
                 elif category == "interior" and all_feedbacks[feedback]["exterior"] <= all_feedbacks[feedback]["interior"]:
-                    true_negative += all_feedbacks[feedback]["exterior"]
+                    true_negative += all_feedbacks[feedback]["feedback_count"]
                 else:
                     print("NOT HANDLED")
                     print(feedback)
@@ -33,14 +33,14 @@ class DataQualityValidation:
             else:
                 # No exclusion as interior was 0
                 if category == "exterior" and all_feedbacks[feedback]["interior"] != 0:
-                    false_positive += all_feedbacks[feedback]["interior"]
+                    false_positive += all_feedbacks[feedback]["feedback_count"]
 
                 elif category == "exterior" and all_feedbacks[feedback]["interior"] == 0:
-                    true_positive += all_feedbacks[feedback]["exterior"]
+                    true_positive += all_feedbacks[feedback]["feedback_count"]
                 elif category == "interior" and all_feedbacks[feedback]["exterior"] != 0:
-                    false_positive += all_feedbacks[feedback]["exterior"]
+                    false_positive += all_feedbacks[feedback]["feedback_count"]
                 elif category == "interior" and all_feedbacks[feedback]["exterior"] == 0:
-                    true_positive += all_feedbacks[feedback]["interior"]
+                    true_positive += all_feedbacks[feedback]["feedback_count"]
 
                 else:
                     print("NOT HANDLED")

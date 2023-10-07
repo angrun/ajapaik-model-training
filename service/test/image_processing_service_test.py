@@ -254,7 +254,7 @@ class ProcessingServiceTest:
                     verdict_fo_interior = random.randint(0, 1)
 
                     handle_processed_image(collections, "interior", image_id_interior_from,
-                                           "exterior" if verdict_fo_exterior == 1 else "interior")
+                                           "exterior" if verdict_fo_interior == 1 else "interior")
 
                     if verdict_fo_interior == 1:
                         interior["interior_wrong"] = interior["interior_wrong"] + 1

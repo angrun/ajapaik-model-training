@@ -15,7 +15,7 @@ class DataQualityValidation:
         for feedback in all_feedbacks:
             category = feedback.split("_")[0]
             image_id = int(feedback.split("_")[1])
-
+            print(feedback)
             # EXCLUDED FLOW
             if image_id in [el.user_id for el in cleaned_up_feedbacks]:
                 print(cleaned_up_feedbacks)

@@ -34,6 +34,7 @@ class DataQuality:
                 print(feedback.verdict_scene)
                 cleanup_feedback.append(feedback)
             else:
+                print("REMOVED FEEDBACK: " + str(feedback))
                 removed_feedback.append(feedback)
 
         print(f"DATA CLEAN UP PERFORMED, REMOVED {len(removed_feedback)}")

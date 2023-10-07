@@ -3,6 +3,45 @@
 class DataQualityValidation:
 
     @staticmethod
-    def prepare_report(all_feedbacks: list, cleaned_up_feedbacks: list):
+    def prepare_report(all_feedbacks: dict, cleaned_up_feedbacks: list):
         print("Preparing the report")
         print(all_feedbacks)
+
+        true_positive = 0
+        true_negative = 0
+        false_negative = 0
+        false_positive = 0
+
+        for feedback in all_feedbacks:
+            category = feedback.split("_")[0]
+            image_id = feedback.split("_")[1]
+
+            # EXCLUDED FLOW
+            if image_id in [el.user_id for el in cleaned_up_feedbacks]:
+                if category == "exterior" and all_feedbacks[feedback]["interior"] >= all_feedbacks[feedback]["exterior"]:
+                    false_negative += 1
+                elif category == "exterior" and all_feedbacks[feedback]["interior"] < all_feedbacks[feedback]["exterior"]:
+                    true_negative += 1
+                else:
+                    print("NOT HANDLED EXCLUSION")
+                    print(feedback)
+            else:
+                # No exclusion as interior was 0
+                if category == "exterior" and all_feedbacks[feedback]["interior"] != 0:
+                    false_positive += 1
+
+                elif category == "exterior" and all_feedbacks[feedback]["interior"] == 0:
+                    true_positive += 1
+                else:
+                    print("NOT HANDLED")
+                    print(feedback)
+
+        print("TRUE POSITIVE: " + str(true_positive))
+        print("TRUE NEGATIVE: " + str(true_negative))
+        print("FALSE POSITIVE: " + str(false_positive))
+        print("FALSE NEGATIVE: " + str(false_negative))
+
+
+    @staticmethod
+    def get_image_id(image_category_id):
+        return image_category_id.split("_")[1]

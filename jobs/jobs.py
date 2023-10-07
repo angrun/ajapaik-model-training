@@ -31,7 +31,8 @@ def aggregate_and_retrain_model():
             # Filter out fraud predictions
             print(f"aggregate-category-data: {len(images_ready_for_processing)} images taken for retraining")
 
-            images_processed_through_data_quality_engine = DataQuality.exclude_faulty_feedback_v1(images_ready_for_processing)
+            images_processed_through_data_quality_engine = \
+                DataQuality.exclude_faulty_feedback_v1(images_ready_for_processing)
 
             images_ready_for_processing = images_processed_through_data_quality_engine[0]
             images_excluded = images_processed_through_data_quality_engine[1]

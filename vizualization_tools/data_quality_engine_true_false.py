@@ -3,10 +3,10 @@ import plotly.io as pio
 
 # Define the data
 data = {
-    'True Positive': 508,
-    'True Negative': 379,
-    'False Positive': 525,
-    'False Negative': 88
+    'True Positive': 464,
+    'True Negative': 74,
+    'False Positive': 922,
+    'False Negative': 40
 }
 
 # Extract labels and values
@@ -25,8 +25,8 @@ color_map = {
 fig = px.bar(
     x=labels,
     y=values,
-    labels={"x": "Data Quality Engine v1 feedbacks processing", "y": "Count"},
-    title="Data Quality Engine v1 feedbacks processing",
+    labels={"x": "Data Quality Engine v2 feedbacks processing", "y": "Count"},
+    title="Data Quality Engine v2 feedbacks processing",
     color=color_map  # Specify color map
 )
 

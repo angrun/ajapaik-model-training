@@ -7,7 +7,7 @@ import plotly.io as pio
 # Sample data
 df = pd.DataFrame(dict(
     group=["True Positive", "True Negative", "False Positive", "False Negative"],
-    value=[508, 379, 525, 88]))
+    value=[464, 74, 922, 40]))
 
 fig = px.bar(df, x='group', y='value', color='group',
              title="Data Quality Engine v1 feedbacks processing",

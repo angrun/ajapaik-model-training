@@ -95,4 +95,5 @@ class DataQuality:
             report_file.writelines(report_lines)
 
         print(f"aggregate-category-data: Finished data quality engine, removed {len(faulty_feedback)} faulty records")
-        return cleaned_feedback
+
+        return cleaned_feedback, faulty_feedback

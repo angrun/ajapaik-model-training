@@ -31,17 +31,17 @@ def aggregate_and_retrain_model():
             # Filter out fraud predictions
             print(f"aggregate-category-data: {len(images_ready_for_processing)} images taken for retraining")
 
-            # images_processed_through_data_quality_engine = \
-            #     DataQuality.exclude_faulty_feedback_v1(images_ready_for_processing)
-            #
-            # images_ready_for_processing = images_processed_through_data_quality_engine[0]
-            # images_excluded = images_processed_through_data_quality_engine[1]
+            images_processed_through_data_quality_engine = \
+                DataQuality.exclude_faulty_feedback_v2(images_ready_for_processing)
 
-            # REPORT
-            # DataQualityValidation.prepare_report(collected_report, images_excluded)
+            images_ready_for_processing = images_processed_through_data_quality_engine[0]
+            images_excluded = images_processed_through_data_quality_engine[1]
 
-            # print(
-            #     f"aggregate-category-data {len(images_excluded)} images EXCLUDED")
+            #REPORT
+            DataQualityValidation.prepare_report(collected_report, images_excluded)
+
+            print(
+                f"aggregate-category-data {len(images_excluded)} images EXCLUDED")
             print(
                 f"aggregate-category-data {len(images_ready_for_processing)} images taken for retraining after quality engine")
             ScenePrediction.retrain_model(images_ready_for_processing)

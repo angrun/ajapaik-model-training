@@ -1,0 +1,17 @@
+
+
+
+  {'exterior_correct': 371, 'exterior_wrong': 379}
+  {'interior_correct': 364, 'interior_wrong': 386}
+
+
+- scene
+    - interior: 3056
+    - exterior: 8614
+- view_point_elevation
+    - ground
+    - raised
+    - aerial
+
+
+

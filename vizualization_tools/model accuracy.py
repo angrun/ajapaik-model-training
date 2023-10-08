@@ -2,10 +2,10 @@ import plotly.express as px
 import plotly.io as pio
 
 # Number of total images
-total_images = 3889
+total_images = 2038
 
 # Number of correctly predicted images
-correct_predictions = 3190
+correct_predictions = 1848
 
 # Calculate the accuracy percentage
 accuracy_percentage = (correct_predictions / total_images) * 100

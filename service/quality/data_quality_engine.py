@@ -122,6 +122,7 @@ class DataQuality:
         correct_exclusion_for_interior = 0
 
         no_exclusion_correct = 0
+        no_exclusion_wrong = 0
 
         faulty_feedbacks = []
         cleanup_data = []
@@ -138,7 +139,12 @@ class DataQuality:
                     correct_exclusion_for_interior += 1
                 faulty_feedbacks.append(feedback)
             else:
-                no_exclusion_correct += 1
+                if feedback.image_id <= 1019 and feedback.verdict_scene == 0:
+                    no_exclusion_wrong += 1
+                if feedback.image_id > 1019 and feedback.verdict_scene == 1:
+                    no_exclusion_wrong += 1
+                else:
+                    no_exclusion_correct += 1
                 cleanup_data.append(feedback)
 
         print("incorrect_exclusion_for_exterior: " + str(incorrect_exclusion_for_exterior))
@@ -146,6 +152,7 @@ class DataQuality:
         print("incorrect_exclusion_for_interior: " + str(incorrect_exclusion_for_interior))
         print("correct_exclusion_for_interior: " + str(correct_exclusion_for_interior))
         print("no_exclusion_correct: " + str(no_exclusion_correct))
+        print("no_exclusion_wrong: " + str(no_exclusion_wrong))
         print("CORRECT_EXTERIOR: " + str(m))
 
         print(f"aggregate-category-data: Finished data quality engine, removed {len(faulty_feedbacks)} faulty records")

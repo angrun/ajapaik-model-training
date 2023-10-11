@@ -134,7 +134,7 @@ class DataQuality:
         with urllib.request.urlopen(url) as url_response:
             img_data = url_response.read()
 
-            image = Image.open(BytesIO(img_data.image_for_processing))
+            image = Image.open(BytesIO(img_data))
 
             image = image.resize((IMG_WIDTH, IMG_HEIGHT))
             image_array = img_to_array(image)

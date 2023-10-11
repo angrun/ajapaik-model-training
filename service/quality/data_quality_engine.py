@@ -115,7 +115,7 @@ class DataQuality:
         faulty_feedbacks = []
         cleanup_data = []
         for feedback in feedback_data:
-            model_prediction = 1
+            model_prediction = DataQuality.get_image_prediction(feedback.image_id)
             if feedback.verdict_scene != model_prediction:
                 faulty_feedbacks.append(feedback)
             else:

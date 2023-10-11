@@ -15,7 +15,7 @@ class DataQualityValidation:
         for feedback in all_feedbacks:
             category = feedback.split("_")[0]
             image_id = int(feedback.split("_")[1])
-
+            
             # EXCLUDED FLOW
             if image_id in [el.image_id for el in cleaned_up_feedbacks]:
                 if category == "exterior" and all_feedbacks[feedback]["interior"] > all_feedbacks[feedback]["exterior"]:

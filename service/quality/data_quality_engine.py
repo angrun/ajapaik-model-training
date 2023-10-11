@@ -116,17 +116,36 @@ class DataQuality:
 
 
         m = {"CORRECT_EXTERIOR": 0, "incorrect_exterior": 0, "correct_interior": 0, "incorrect_interior": 0}
+        incorrect_exclusion_for_exterior = 0
+        correct_exclusion_for_exterior = 0
+        incorrect_exclusion_for_interior = 0
+        correct_exclusion_for_interior = 0
 
+        no_exclusion_correct = 0
 
         faulty_feedbacks = []
         cleanup_data = []
         for feedback in feedback_data:
             model_prediction = DataQuality.get_image_prediction(feedback.image_id, m)
             if feedback.verdict_scene != model_prediction:
+                if feedback.image_id <= 1019 and feedback.verdict_scene == 1:
+                   incorrect_exclusion_for_exterior += 1
+                if feedback.image_id <= 1019 and feedback.verdict_scene == 0:
+                    correct_exclusion_for_exterior += 1
+                if feedback.image_id > 1019 and feedback.verdict_scene == 0:
+                    incorrect_exclusion_for_interior += 1
+                if feedback.image_id > 1019 and feedback.verdict_scene == 1:
+                    correct_exclusion_for_interior += 1
                 faulty_feedbacks.append(feedback)
             else:
+                no_exclusion_correct += 1
                 cleanup_data.append(feedback)
 
+        print("incorrect_exclusion_for_exterior: " + str(incorrect_exclusion_for_exterior))
+        print("correct_exclusion_for_exterior: " + str(correct_exclusion_for_exterior))
+        print("incorrect_exclusion_for_interior: " + str(incorrect_exclusion_for_interior))
+        print("correct_exclusion_for_interior: " + str(correct_exclusion_for_interior))
+        print("no_exclusion_correct: " + str(no_exclusion_correct))
         print("CORRECT_EXTERIOR: " + str(m))
 
         print(f"aggregate-category-data: Finished data quality engine, removed {len(faulty_feedbacks)} faulty records")

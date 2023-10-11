@@ -113,31 +113,27 @@ class DataQuality:
 
     @staticmethod
     def exclude_faulty_feedback_v3(feedback_data):
-        CORRECT_EXTERIOR = 0
-        incorrect_exterior = 0
-        correct_interior = 0
-        incorrect_interior = 0
+
+
+        m = {"CORRECT_EXTERIOR": 0, "incorrect_exterior": 0, "correct_interior": 0, "incorrect_interior": 0}
 
 
         faulty_feedbacks = []
         cleanup_data = []
         for feedback in feedback_data:
-            model_prediction = DataQuality.get_image_prediction(feedback.image_id, CORRECT_EXTERIOR, incorrect_exterior, correct_interior, incorrect_interior)
+            model_prediction = DataQuality.get_image_prediction(feedback.image_id, m)
             if feedback.verdict_scene != model_prediction:
                 faulty_feedbacks.append(feedback)
             else:
                 cleanup_data.append(feedback)
 
-        print("CORRECT_EXTERIOR: " + str(CORRECT_EXTERIOR))
-        print("incorrect_exterior: " + str(incorrect_exterior))
-        print("correct_interior: " + str(correct_interior))
-        print("incorrect_interior: " + str(incorrect_interior))
+        print("CORRECT_EXTERIOR: " + str(m))
 
         print(f"aggregate-category-data: Finished data quality engine, removed {len(faulty_feedbacks)} faulty records")
         return cleanup_data, faulty_feedbacks
 
     @staticmethod
-    def get_image_prediction(image_id, CORRECT_EXTERIOR, incorrect_exterior, correct_interior, incorrect_interior):
+    def get_image_prediction(image_id, m):
         model_prediction = 1
         IMG_WIDTH, IMG_HEIGHT = 224, 224
         THUMB_URL = "http://localhost:8000/"
@@ -166,12 +162,17 @@ class DataQuality:
 
             if image_id <= 1019:
                 if model_prediction == 1:
-                    CORRECT_EXTERIOR += 1
+                    m["CORRECT_EXTERIOR"] = m["CORRECT_EXTERIOR"] + 1
                 else:
-                    incorrect_exterior += 1
+                    m["incorrect_exterior"] = m["incorrect_exterior"] + 1
             if image_id > 1019:
                 if model_prediction == 0:
-                    correct_interior += 1
+                    m["correct_interior"] = m["correct_interior"] + 1
                 else:
-                    incorrect_interior += 0
+                    m["incorrect_interior"] = m["incorrect_interior"] + 1
+            return model_prediction
+
+
+
+
 

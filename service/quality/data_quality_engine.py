@@ -1,10 +1,23 @@
+import urllib.request
 from collections import defaultdict, Counter
 from datetime import datetime
 
 from sklearn.ensemble import IsolationForest
 from sklearn.preprocessing import StandardScaler
 
+import numpy as np
+
+# from keras.utils import img_to_array
+
+from io import BytesIO
+from PIL import Image
+from keras.utils import img_to_array
+
 from service.image_processing_service import ProcessingImage
+from service.model.image_scene_model_prediction import ScenePrediction
+
+
+# from service.model.image_scene_model_prediction import ScenePrediction
 
 
 class DataQuality:
@@ -22,7 +35,6 @@ class DataQuality:
         most_common_verdicts = {}
         for image_id, verdict_counts in verdict_counts_per_image.items():
             most_common_verdicts[image_id] = verdict_counts.most_common(1)[0][0]
-
 
         print("MOST COMMON VERDICTS")
         print(most_common_verdicts)
@@ -97,3 +109,45 @@ class DataQuality:
         print(f"aggregate-category-data: Finished data quality engine, removed {len(faulty_feedback)} faulty records")
 
         return cleaned_feedback, faulty_feedback
+
+    @staticmethod
+    def exclude_faulty_feedback_v3(feedback_data):
+        faulty_feedbacks = []
+        cleanup_data = []
+        for feedback in feedback_data:
+            model_prediction = 1
+            if feedback.verdict_scene != model_prediction:
+                faulty_feedbacks.append(feedback)
+            else:
+                cleanup_data.append(feedback)
+
+        print(f"aggregate-category-data: Finished data quality engine, removed {len(faulty_feedbacks)} faulty records")
+        return cleanup_data, faulty_feedbacks
+
+    @staticmethod
+    def get_image_prediction(image_id):
+        IMG_WIDTH, IMG_HEIGHT = 224, 224
+        THUMB_URL = "http://localhost:8000/"
+        THUMB_PREFIX = "photo-thumb/"
+        verdict_scene_interior = 0
+        url = f"{THUMB_URL}{THUMB_PREFIX}{image_id}"
+        with urllib.request.urlopen(url) as url_response:
+            img_data = url_response.read()
+
+            image = Image.open(BytesIO(img_data.image_for_processing))
+
+            image = image.resize((IMG_WIDTH, IMG_HEIGHT))
+            image_array = img_to_array(image)
+
+            # Preprocess your image
+            image_array = image_array / 255.0
+            image_array = np.expand_dims(image_array, axis=0)
+
+            # Classify your image
+            class_probabilities = ScenePrediction.model.predict(image_array)[0][0]
+
+            # 0 - interior, 1 = exterior
+            predictions = {0: 1 - class_probabilities, 1: class_probabilities}
+            if predictions[0] > predictions[1]:
+                return 0
+            return 1

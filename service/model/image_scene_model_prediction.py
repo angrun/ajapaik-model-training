@@ -128,7 +128,7 @@ class ScenePrediction:
             # Resize the image to the desired dimensions (IMG_WIDTH, IMG_HEIGHT)
             pil_image = pil_image.resize((IMG_WIDTH, IMG_HEIGHT))
 
-            # Convert the PIL image to numpy array
+            # Convert the PIL image to a numpy array
             np_image = np.array(pil_image)
 
             # Normalize the image data
@@ -140,19 +140,17 @@ class ScenePrediction:
         new_images = np.array(new_images)
         new_labels = np.array(new_labels)
 
-        num_classes = 2  # Assuming there are 2 classes: interior and exterior
+        num_classes = 1  # Assuming there are 2 classes: interior and exterior
 
         # Load the saved model
         model = tensorflow.keras.models.load_model(ScenePrediction.model_path)
 
-        # Replace the last layer with a new layer for the desired number of classes
+        # Remove the last layer (output layer) to match the original model architecture
         model.pop()
-        model.add(Dense(num_classes, activation='softmax', name='output'))
 
-        # Retrain the model
-        model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
-        model.fit(new_images, to_categorical(new_labels, num_classes), epochs=20,
-                  validation_split=0.2)  # You can adjust the validation split
+        # Retrain the model with binary cross-entropy
+        model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+        model.fit(new_images, new_labels, epochs=20, validation_split=0.2)  # You can adjust the validation split
 
         # Save the retrained model
         model.save(ScenePrediction.model_path)

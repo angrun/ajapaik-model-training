@@ -18,7 +18,7 @@ UNCATEGORIZED_IMAGES = "UNCATEGORIZED IMAGES"
 def aggregate_and_retrain_model():
     response = requests.get(URL + 'object-categorization/aggregate-category-data')
     if response.status_code == 200:
-        print(f"aggregate-category-data: Data for retraining fetched successfully\n")
+        print(f"{IMAGE_AGGREGATION}: Data for retraining fetched successfully\n")
 
         # images_ready_for_processing = ProcessingService.process_images_for_retraining(response.content)
         processed_images = ProcessingServiceTest.process_images_for_retraining_v3()  # Mock data

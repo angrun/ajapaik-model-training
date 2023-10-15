@@ -4,7 +4,7 @@ import tensorflow
 from tensorflow.keras.utils import to_categorical
 
 from keras import Sequential
-from keras.layers import Conv2D, MaxPooling2D, Flatten, Dense
+from keras.layers import Flatten, Dense
 from keras.models import load_model
 from keras.utils import img_to_array
 
@@ -12,13 +12,6 @@ from io import BytesIO
 from PIL import Image
 
 from service.image_processing_service import ProcessingImage
-
-# TODO: find the way not to give absolute path
-SCENE_DIR = 'resources/scene'
-IMG_WIDTH, IMG_HEIGHT = 224, 224
-BATCH_SIZE = 32
-
-model = None
 
 from keras.preprocessing.image import ImageDataGenerator
 import numpy as np
@@ -29,6 +22,12 @@ from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau
 from tensorflow.keras.applications import MobileNetV2
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
+
+SCENE_DIR = 'resources/scene'
+IMG_WIDTH, IMG_HEIGHT = 224, 224
+BATCH_SIZE = 32
+
+model = None
 
 
 class ScenePrediction:
@@ -114,7 +113,6 @@ class ScenePrediction:
         predictions = {0: 1 - class_probabilities, 1: class_probabilities}
         return predictions
 
-    # RETRAINING PART
     @staticmethod
     def retrain_model(processed_images):
         new_images = []  # List to store preprocessed images

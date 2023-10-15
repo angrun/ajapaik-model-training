@@ -7,21 +7,14 @@ from sklearn.preprocessing import StandardScaler
 
 import numpy as np
 
-# from keras.utils import img_to_array
-
 from io import BytesIO
 from PIL import Image
 from keras.utils import img_to_array
 
-from service.image_processing_service import ProcessingImage
 from service.model.image_scene_model_prediction import ScenePrediction
 
 
-# from service.model.image_scene_model_prediction import ScenePrediction
-CORRECT_EXTERIOR = 0
-
 class DataQuality:
-
 
     # Version 1
     @staticmethod
@@ -56,7 +49,6 @@ class DataQuality:
         print(f"DATA CLEAN UP PERFORMED, CONSIDERING {len(cleanup_feedback)}")
         return cleanup_feedback, removed_feedback
 
-    # Version 2
     @staticmethod
     def exclude_faulty_feedback_v2(feedback_data):
         user_data = {}
@@ -114,7 +106,6 @@ class DataQuality:
     @staticmethod
     def exclude_faulty_feedback_v3(feedback_data):
 
-
         m = {"CORRECT_EXTERIOR": 0, "incorrect_exterior": 0, "correct_interior": 0, "incorrect_interior": 0}
         incorrect_exclusion_for_exterior = 0
         correct_exclusion_for_exterior = 0
@@ -130,7 +121,7 @@ class DataQuality:
             model_prediction = DataQuality.get_image_prediction(feedback.image_id, m)
             if feedback.verdict_scene != model_prediction:
                 if feedback.image_id <= 1019 and feedback.verdict_scene == 1:
-                   incorrect_exclusion_for_exterior += 1
+                    incorrect_exclusion_for_exterior += 1
                 if feedback.image_id <= 1019 and feedback.verdict_scene == 0:
                     correct_exclusion_for_exterior += 1
                 if feedback.image_id > 1019 and feedback.verdict_scene == 0:
@@ -164,7 +155,6 @@ class DataQuality:
         IMG_WIDTH, IMG_HEIGHT = 224, 224
         THUMB_URL = "http://localhost:8000/"
         THUMB_PREFIX = "photo-thumb/"
-        verdict_scene_interior = 0
         url = f"{THUMB_URL}{THUMB_PREFIX}{image_id}"
         with urllib.request.urlopen(url) as url_response:
             img_data = url_response.read()
@@ -174,14 +164,11 @@ class DataQuality:
             image = image.resize((IMG_WIDTH, IMG_HEIGHT))
             image_array = img_to_array(image)
 
-            # Preprocess your image
             image_array = image_array / 255.0
             image_array = np.expand_dims(image_array, axis=0)
 
-            # Classify your image
             class_probabilities = ScenePrediction.model.predict(image_array)[0][0]
 
-            # 0 - interior, 1 = exterior
             predictions = {0: 1 - class_probabilities, 1: class_probabilities}
             if predictions[0] > predictions[1]:
                 model_prediction = 0
@@ -197,8 +184,3 @@ class DataQuality:
                 else:
                     m["incorrect_interior"] = m["incorrect_interior"] + 1
             return model_prediction
-
-
-
-
-

@@ -1,4 +1,4 @@
-# ProcessingImage(1, image_id, img_data, verdict_scene=verdict_scene_interior)
+# TODO: think about other ways how to validate model
 
 class DataQualityValidation:
 
@@ -15,16 +15,19 @@ class DataQualityValidation:
         for feedback in all_feedbacks:
             category = feedback.split("_")[0]
             image_id = int(feedback.split("_")[1])
-            
+
             # EXCLUDED FLOW
             if image_id in [el.image_id for el in cleaned_up_feedbacks]:
                 if category == "exterior" and all_feedbacks[feedback]["interior"] > all_feedbacks[feedback]["exterior"]:
                     false_negative += all_feedbacks[feedback]["feedback_count"]
-                elif category == "exterior" and all_feedbacks[feedback]["interior"] <= all_feedbacks[feedback]["exterior"]:
+                elif category == "exterior" and all_feedbacks[feedback]["interior"] <= all_feedbacks[feedback][
+                    "exterior"]:
                     true_negative += all_feedbacks[feedback]["feedback_count"]
-                elif category == "interior" and all_feedbacks[feedback]["exterior"] > all_feedbacks[feedback]["interior"]:
+                elif category == "interior" and all_feedbacks[feedback]["exterior"] > all_feedbacks[feedback][
+                    "interior"]:
                     false_negative += all_feedbacks[feedback]["feedback_count"]
-                elif category == "interior" and all_feedbacks[feedback]["exterior"] <= all_feedbacks[feedback]["interior"]:
+                elif category == "interior" and all_feedbacks[feedback]["exterior"] <= all_feedbacks[feedback][
+                    "interior"]:
                     true_negative += all_feedbacks[feedback]["feedback_count"]
                 else:
                     print("NOT HANDLED")
@@ -45,7 +48,6 @@ class DataQualityValidation:
                 else:
                     print("NOT HANDLED")
                     print(feedback)
-
 
         print("TRUE POSITIVE: " + str(true_positive))
         print("TRUE NEGATIVE: " + str(true_negative))

@@ -7,10 +7,10 @@ import plotly.io as pio
 # Sample data
 df = pd.DataFrame(dict(
     group=["True Positive", "True Negative", "False Positive", "False Negative"],
-    value=[461, 432, 62, 89]))
+    value=[686, 665, 68, 81]))
 
 fig = px.bar(df, x='group', y='value', color='group',
-             title="Data Quality Engine v3 feedbacks processing",
+             title="Data Quality Engine v3 feedbacks processing towards ground truth",
              color_discrete_map={
                  'True Positive': '#96d665',
                  'True Negative': '#96d665',

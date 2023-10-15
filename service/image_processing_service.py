@@ -7,6 +7,7 @@ THUMB_PREFIX = "photo-thumb/"
 RESULT_PREFIX = "object-categorization/publish-picture-category-result/"
 HEADERS = {"Content-Type": "application/json"}
 DECISION_RATE = 0.5
+CATEGORY_PREDICTION = "CATEGORY_PREDICTION"
 
 
 class ProcessingService:
@@ -17,7 +18,6 @@ class ProcessingService:
         for image in image_payload:
             image_id = image[0]
             user_id = image[1]
-            image_url = image[2]
             url = f"{THUMB_URL}{THUMB_PREFIX}{image_id}"
             with urllib.request.urlopen(url) as url_response:
                 img_data = url_response.read()
@@ -51,9 +51,8 @@ class ProcessingService:
             processed_image.verdict_scene = max(filtered_d, key=filtered_d.get)
         return processed_image
 
-    # TODO: to do it in batch mode
     @staticmethod
-    def batch_to_result_table(processed_image):
+    def post_model_predictions_to_result_table(processed_image):
         payload = {
             "photo_id": processed_image.image_id,
         }
@@ -66,9 +65,9 @@ class ProcessingService:
         response = requests.post(f"{THUMB_URL}{RESULT_PREFIX}", json=payload, headers=HEADERS)
 
         if response.status_code == 200:
-            print("get-uncategorized-images: success posting categories for uncategorized images\n")
+            print(f"{CATEGORY_PREDICTION}: success posting categories for uncategorized images\n")
         else:
-            print(f"Error: {response.status_code} - {response.text}")
+            print(f"{CATEGORY_PREDICTION}: error: {response.status_code} - {response.text}")
 
 
 class ProcessingImage:

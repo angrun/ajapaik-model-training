@@ -1,3 +1,0 @@
-{'exterior':
-{'image_id': 701, 'data': {'feedback_count': 1, 'exterior': 0, 'interior': 0}},
-'interior': {'image_id': 0, 'data': {'feedback_count': 0, 'exterior': 0, 'interior': 0}}}

@@ -5,6 +5,8 @@ import urllib.request
 import random
 
 
+# TODO: mock data used for validation purposes, to be removed
+
 def handle_processed_image(collections, category, image_id, verdict):
     item = category + "_" + str(image_id)
     if item not in collections.keys():
@@ -233,7 +235,6 @@ class ProcessingServiceTest:
                 print(e)
                 print("EXCEPTION")
             counter += 1
-
 
         print(exterior)
         counter = 0

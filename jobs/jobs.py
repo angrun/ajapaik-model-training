@@ -55,21 +55,20 @@ def categorize_uncategorized_images():
 
     response = requests.get(URL + 'object-categorization/get-uncategorized-images')
     if response.status_code == 200:
-        logger.info(f"{UNCATEGORIZED_IMAGES}: Data fetched successfully")
+        logger.info(f"{UNCATEGORIZED_IMAGES}: data fetched successfully")
         response_data = json.loads(response.content.decode('utf-8'))
         data = response_data['data']  # [photo_id, user_id, photo_name]
 
         images_ready_for_processing = ProcessingService.process(data)
         if not images_ready_for_processing:
-            print("get-uncategorized-images: No new uncategorized images available\n")
+            print(f"{UNCATEGORIZED_IMAGES}: no new uncategorized images available\n")
 
         else:
             print(
-                f"get-uncategorized-images: Received {len(images_ready_for_processing)} images for category predictions\n")
+                f"{UNCATEGORIZED_IMAGES}: received {len(images_ready_for_processing)} images for category predictions\n")
             for image in images_ready_for_processing:
                 scene_prediction = ScenePrediction.predict(image)
                 image_to_send = ProcessingService.prepare_prediction_for_final_verdict(image, scene_prediction)
                 ProcessingService.post_model_predictions_to_result_table(image_to_send)
     else:
-        print(f"Request failed with status code {response.status_code}")
-        logger.info(f"Ung fetching failed with status code {response.status_code}")
+        print(f"{UNCATEGORIZED_IMAGES}: request failed with status code {response.status_code}")

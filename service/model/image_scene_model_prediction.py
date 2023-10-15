@@ -134,30 +134,28 @@ class ScenePrediction:
             # Normalize the image data
             np_image = np_image.astype('float32') / 255.0
 
-            new_images.append(np_image)  # [%BX@....,
-            new_labels.append(label)  # [0, 1, 1, 1..
+            new_images.append(np_image)
+            new_labels.append(label)
 
         new_images = np.array(new_images)
         new_labels = np.array(new_labels)
 
-        # Convert labels to categorical format
         num_classes = 2  # Assuming there are 2 classes: interior and exterior
-        new_labels = to_categorical(new_labels, num_classes)
 
         # Load the saved model
-        ScenePrediction.model = tensorflow.keras.models.load_model(ScenePrediction.model_path)
+        model = tensorflow.keras.models.load_model(ScenePrediction.model_path)
 
         # Replace the last layer with a new layer for the desired number of classes
-        ScenePrediction.model.pop()
-        ScenePrediction.model.add(Dense(num_classes, activation='softmax', name='output'))
+        model.pop()
+        model.add(Dense(num_classes, activation='softmax', name='output'))
 
         # Retrain the model
-        ScenePrediction.model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
-        ScenePrediction.model.fit(new_images, new_labels, epochs=20,
-                                  validation_split=ScenePrediction.determine_validation(new_images))
+        model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+        model.fit(new_images, to_categorical(new_labels, num_classes), epochs=20,
+                  validation_split=0.2)  # You can adjust the validation split
 
         # Save the retrained model
-        ScenePrediction.model.save(ScenePrediction.model_path)
+        model.save(ScenePrediction.model_path)
         print("Model is retrained")
 
     @staticmethod

@@ -145,9 +145,8 @@ class ScenePrediction:
         # Load the saved model
         model = tensorflow.keras.models.load_model(ScenePrediction.model_path)
 
-        # Replace the last layer with a new layer for the desired number of classes
-        model.pop()
-        model.add(Dense(num_classes, activation='softmax', name='output'))
+        # Add a new output layer for the desired number of classes
+        model.add(Dense(num_classes, activation='softmax', name='new_output'))
 
         # Retrain the model
         model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])

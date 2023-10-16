@@ -113,10 +113,53 @@ class ScenePrediction:
         predictions = {0: 1 - class_probabilities, 1: class_probabilities}
         return predictions
 
+    # @staticmethod
+    # def retrain_model(processed_images):
+    #     new_images = []  # List to store preprocessed images
+    #     new_labels = []  # List to store corresponding labels
+    #
+    #     for image in processed_images:
+    #         image_data = image.image_for_processing
+    #         label = image.verdict_scene
+    #
+    #         # Convert the image data to a PIL image
+    #         pil_image = Image.open(io.BytesIO(image_data)).convert("RGB")
+    #
+    #         # Resize the image to the desired dimensions (IMG_WIDTH, IMG_HEIGHT)
+    #         pil_image = pil_image.resize((IMG_WIDTH, IMG_HEIGHT))
+    #
+    #         # Convert the PIL image to a numpy array
+    #         np_image = np.array(pil_image)
+    #
+    #         # Normalize the image data
+    #         np_image = np_image.astype('float32') / 255.0
+    #
+    #         new_images.append(np_image)
+    #         new_labels.append(label)
+    #
+    #     new_images = np.array(new_images)
+    #     new_labels = np.array(new_labels)
+    #
+    #     num_classes = 1  # Assuming there are 2 classes: interior and exterior
+    #
+    #     # Load the saved model
+    #     model = tensorflow.keras.models.load_model(ScenePrediction.model_path)
+    #
+    #     # Remove the last layer (output layer) to match the original model architecture
+    #     model.pop()
+    #
+    #     # Retrain the model with binary cross-entropy
+    #     model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+    #     model.fit(new_images, new_labels, epochs=20, validation_split=0.2)  # You can adjust the validation split
+    #
+    #     # Save the retrained model
+    #     model.save(ScenePrediction.model_path)
+    #     print("Model is retrained")
+
     @staticmethod
     def retrain_model(processed_images):
-        new_images = []  # List to store preprocessed images
-        new_labels = []  # List to store corresponding labels
+        images = []  # List to store preprocessed images
+        verdicts = []  # List to store corresponding labels
 
         for image in processed_images:
             image_data = image.image_for_processing
@@ -134,27 +177,35 @@ class ScenePrediction:
             # Normalize the image data
             np_image = np_image.astype('float32') / 255.0
 
-            new_images.append(np_image)
-            new_labels.append(label)
+            images.append(np_image)
+            verdicts.append(label)
 
-        new_images = np.array(new_images)
-        new_labels = np.array(new_labels)
+        # Load the existing model or use the one you've already trained.
+        model = ScenePrediction.model
 
-        num_classes = 1  # Assuming there are 2 classes: interior and exterior
+        # You can fine-tune the existing model with the user feedback data.
+        train_datagen = ImageDataGenerator(
+            rescale=1. / 255,
+            shear_range=0.2,
+            zoom_range=0.2,
+            rotation_range=20,
+            width_shift_range=0.2,
+            height_shift_range=0.2,
+            horizontal_flip=True
+        )
+        train_generator = train_datagen.flow(np.array(images), np.array(verdicts), batch_size=BATCH_SIZE)
 
-        # Load the saved model
-        model = tensorflow.keras.models.load_model(ScenePrediction.model_path)
+        # Re-compile the model if needed (you may adjust the learning rate or other hyperparameters).
+        optimizer = Adam(learning_rate=0.001)
+        model.compile(optimizer=optimizer, loss='binary_crossentropy', metrics=['accuracy'])
 
-        # Remove the last layer (output layer) to match the original model architecture
-        model.pop()
+        # Train the model with user feedback data.
+        model.fit(train_generator, epochs=20)
 
-        # Retrain the model with binary cross-entropy
-        model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
-        model.fit(new_images, new_labels, epochs=20, validation_split=0.2)  # You can adjust the validation split
-
-        # Save the retrained model
+        # Save the retrained model.
         model.save(ScenePrediction.model_path)
-        print("Model is retrained")
+
+        print("Model retraining complete.")
 
     @staticmethod
     def determine_validation(new_images):

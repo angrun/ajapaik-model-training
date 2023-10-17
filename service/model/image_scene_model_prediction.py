@@ -270,6 +270,15 @@ class ScenePrediction:
 
         model.compile(optimizer=optimizer, loss='binary_crossentropy', metrics=['accuracy'])
 
+        # Create a separate validation data generator
+        val_datagen = ImageDataGenerator(rescale=1. / 255)
+        val_generator = val_datagen.flow(
+            np.array(images),
+            np.array(verdicts),
+            batch_size=BATCH_SIZE,
+            shuffle=True
+        )
+
         # Implement early stopping and learning rate reduction on plateau
         callbacks = [
             EarlyStopping(patience=10, restore_best_weights=True),  # Increased patience
@@ -280,7 +289,7 @@ class ScenePrediction:
         model.fit(
             train_generator,
             epochs=50,
-            validation_split=0.2,  # Use validation split
+            validation_data=val_generator,  # Use separate validation data generator
             callbacks=callbacks + [learning_rate_scheduler],  # Include learning rate schedule
             shuffle=True  # Shuffle training data
         )

@@ -207,7 +207,6 @@ class ScenePrediction:
     #
     #     print("Model retraining complete.")
 
-
     @staticmethod
     def retrain_model(processed_images):
         images = []  # List to store preprocessed images
@@ -244,8 +243,8 @@ class ScenePrediction:
             width_shift_range=0.2,
             height_shift_range=0.2,
             horizontal_flip=True,
-            brightness_range=[0.8, 1.2],  # Additional augmentation
-            fill_mode='nearest'  # Additional augmentation
+            brightness_range=[0.8, 1.2],
+            fill_mode='nearest'
         )
 
         # Create a data generator with additional augmentation
@@ -253,13 +252,32 @@ class ScenePrediction:
             np.array(images),
             np.array(verdicts),
             batch_size=BATCH_SIZE,
-            shuffle=True  # Shuffle the training data
+            shuffle=True
         )
 
         # Fine-tune the existing model with the user feedback data.
-        # You may adjust other hyperparameters as needed.
-        optimizer = Adam(learning_rate=0.0001)  # Adjusted learning rate
+        optimizer = Adam(learning_rate=0.0001)
         model.compile(optimizer=optimizer, loss='binary_crossentropy', metrics=['accuracy'])
+
+        # Split your data into training and validation data generators
+        # For example, you can use 80% for training and 20% for validation
+        split_index = int(0.8 * len(images))
+        train_images, val_images = images[:split_index], images[split_index:]
+        train_verdicts, val_verdicts = verdicts[:split_index], verdicts[split_index:]
+
+        train_generator = train_datagen.flow(
+            np.array(train_images),
+            np.array(train_verdicts),
+            batch_size=BATCH_SIZE,
+            shuffle=True
+        )
+
+        val_datagen = ImageDataGenerator(rescale=1. / 255)
+        val_generator = val_datagen.flow(
+            np.array(val_images),
+            np.array(val_verdicts),
+            batch_size=BATCH_SIZE
+        )
 
         # Implement early stopping and learning rate reduction on plateau
         callbacks = [
@@ -267,11 +285,11 @@ class ScenePrediction:
             ReduceLROnPlateau(factor=0.1, patience=3)
         ]
 
-        # Train the model with user feedback data.
+        # Train the model with user feedback data using separate training and validation generators
         model.fit(
             train_generator,
-            epochs=50,  # Increased number of epochs
-            validation_split=0.2,  # Use a validation split
+            epochs=50,
+            validation_data=val_generator,  # Use separate validation data generator
             callbacks=callbacks
         )
 

@@ -1,6 +1,7 @@
 import io
 import os
 import tensorflow
+from keras.src.callbacks import LearningRateScheduler
 from tensorflow.keras.utils import to_categorical
 
 from keras import Sequential
@@ -257,40 +258,31 @@ class ScenePrediction:
 
         # Fine-tune the existing model with the user feedback data.
         optimizer = Adam(learning_rate=0.0001)
+
+        # Implement learning rate schedule to reduce learning rate during training
+        def learning_rate_schedule(epoch, lr):
+            if epoch < 20:
+                return lr
+            else:
+                return lr * 0.1
+
+        learning_rate_scheduler = LearningRateScheduler(learning_rate_schedule)
+
         model.compile(optimizer=optimizer, loss='binary_crossentropy', metrics=['accuracy'])
-
-        # Split your data into training and validation data generators
-        # For example, you can use 80% for training and 20% for validation
-        split_index = int(0.8 * len(images))
-        train_images, val_images = images[:split_index], images[split_index:]
-        train_verdicts, val_verdicts = verdicts[:split_index], verdicts[split_index:]
-
-        train_generator = train_datagen.flow(
-            np.array(train_images),
-            np.array(train_verdicts),
-            batch_size=BATCH_SIZE,
-            shuffle=True
-        )
-
-        val_datagen = ImageDataGenerator(rescale=1. / 255)
-        val_generator = val_datagen.flow(
-            np.array(val_images),
-            np.array(val_verdicts),
-            batch_size=BATCH_SIZE
-        )
 
         # Implement early stopping and learning rate reduction on plateau
         callbacks = [
-            EarlyStopping(patience=5, restore_best_weights=True),
-            ReduceLROnPlateau(factor=0.1, patience=3)
+            EarlyStopping(patience=10, restore_best_weights=True),  # Increased patience
+            ReduceLROnPlateau(factor=0.1, patience=5)  # Increased patience
         ]
 
         # Train the model with user feedback data using separate training and validation generators
         model.fit(
             train_generator,
             epochs=50,
-            validation_data=val_generator,  # Use separate validation data generator
-            callbacks=callbacks
+            validation_split=0.2,  # Use validation split
+            callbacks=callbacks + [learning_rate_scheduler],  # Include learning rate schedule
+            shuffle=True  # Shuffle training data
         )
 
         # Save the retrained model.

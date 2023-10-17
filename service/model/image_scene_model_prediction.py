@@ -156,6 +156,58 @@ class ScenePrediction:
     #     model.save(ScenePrediction.model_path)
     #     print("Model is retrained")
 
+    # @staticmethod
+    # def retrain_model(processed_images):
+    #     images = []  # List to store preprocessed images
+    #     verdicts = []  # List to store corresponding labels
+    #
+    #     for image in processed_images:
+    #         image_data = image.image_for_processing
+    #         label = image.verdict_scene
+    #
+    #         # Convert the image data to a PIL image
+    #         pil_image = Image.open(io.BytesIO(image_data)).convert("RGB")
+    #
+    #         # Resize the image to the desired dimensions (IMG_WIDTH, IMG_HEIGHT)
+    #         pil_image = pil_image.resize((IMG_WIDTH, IMG_HEIGHT))
+    #
+    #         # Convert the PIL image to a numpy array
+    #         np_image = np.array(pil_image)
+    #
+    #         # Normalize the image data
+    #         np_image = np_image.astype('float32') / 255.0
+    #
+    #         images.append(np_image)
+    #         verdicts.append(label)
+    #
+    #     # Load the existing model or use the one you've already trained.
+    #     model = ScenePrediction.model
+    #
+    #     # You can fine-tune the existing model with the user feedback data.
+    #     train_datagen = ImageDataGenerator(
+    #         rescale=1. / 255,
+    #         shear_range=0.2,
+    #         zoom_range=0.2,
+    #         rotation_range=20,
+    #         width_shift_range=0.2,
+    #         height_shift_range=0.2,
+    #         horizontal_flip=True
+    #     )
+    #     train_generator = train_datagen.flow(np.array(images), np.array(verdicts), batch_size=BATCH_SIZE)
+    #
+    #     # Re-compile the model if needed (you may adjust the learning rate or other hyperparameters).
+    #     optimizer = Adam(learning_rate=0.001)
+    #     model.compile(optimizer=optimizer, loss='binary_crossentropy', metrics=['accuracy'])
+    #
+    #     # Train the model with user feedback data.
+    #     model.fit(train_generator, epochs=20)
+    #
+    #     # Save the retrained model.
+    #     model.save(ScenePrediction.model_path)
+    #
+    #     print("Model retraining complete.")
+
+
     @staticmethod
     def retrain_model(processed_images):
         images = []  # List to store preprocessed images
@@ -183,7 +235,7 @@ class ScenePrediction:
         # Load the existing model or use the one you've already trained.
         model = ScenePrediction.model
 
-        # You can fine-tune the existing model with the user feedback data.
+        # Use data augmentation during training
         train_datagen = ImageDataGenerator(
             rescale=1. / 255,
             shear_range=0.2,
@@ -191,16 +243,37 @@ class ScenePrediction:
             rotation_range=20,
             width_shift_range=0.2,
             height_shift_range=0.2,
-            horizontal_flip=True
+            horizontal_flip=True,
+            brightness_range=[0.8, 1.2],  # Additional augmentation
+            fill_mode='nearest'  # Additional augmentation
         )
-        train_generator = train_datagen.flow(np.array(images), np.array(verdicts), batch_size=BATCH_SIZE)
 
-        # Re-compile the model if needed (you may adjust the learning rate or other hyperparameters).
-        optimizer = Adam(learning_rate=0.001)
+        # Create a data generator with additional augmentation
+        train_generator = train_datagen.flow(
+            np.array(images),
+            np.array(verdicts),
+            batch_size=BATCH_SIZE,
+            shuffle=True  # Shuffle the training data
+        )
+
+        # Fine-tune the existing model with the user feedback data.
+        # You may adjust other hyperparameters as needed.
+        optimizer = Adam(learning_rate=0.0001)  # Adjusted learning rate
         model.compile(optimizer=optimizer, loss='binary_crossentropy', metrics=['accuracy'])
 
+        # Implement early stopping and learning rate reduction on plateau
+        callbacks = [
+            EarlyStopping(patience=5, restore_best_weights=True),
+            ReduceLROnPlateau(factor=0.1, patience=3)
+        ]
+
         # Train the model with user feedback data.
-        model.fit(train_generator, epochs=20)
+        model.fit(
+            train_generator,
+            epochs=50,  # Increased number of epochs
+            validation_split=0.2,  # Use a validation split
+            callbacks=callbacks
+        )
 
         # Save the retrained model.
         model.save(ScenePrediction.model_path)

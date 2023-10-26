@@ -1,6 +1,7 @@
 import io
 import os
 import tensorflow
+from keras.src.callbacks import LearningRateScheduler
 # from keras.src.callbacks import LearningRateScheduler
 from tensorflow.keras.utils import to_categorical
 
@@ -122,12 +123,12 @@ class ViewPointElevationPrediction:
 
     @staticmethod
     def retrain_model(processed_images):
-        new_images = []  # List to store preprocessed images
-        new_labels = []  # List to store corresponding labels
+        images = []  # List to store preprocessed images
+        verdicts = []  # List to store corresponding labels
 
         for image in processed_images:
             image_data = image.image_for_processing
-            label = image.verdict_scene
+            label = image.verdict_view_point_elevation
 
             # Convert the image data to a PIL image
             pil_image = Image.open(io.BytesIO(image_data)).convert("RGB")
@@ -141,169 +142,75 @@ class ViewPointElevationPrediction:
             # Normalize the image data
             np_image = np_image.astype('float32') / 255.0
 
-            new_images.append(np_image)
-            new_labels.append(label)
+            images.append(np_image)
+            verdicts.append(label)
 
-        new_images = np.array(new_images)
-        new_labels = np.array(new_labels)
+        # Load the existing model or use the one you've already trained.
+        model = ViewPointElevationPrediction.model
 
-        num_classes = 3  # Assuming there are 2 classes: interior and exterior
+        # Use data augmentation during training
+        train_datagen = ImageDataGenerator(
+            rescale=1. / 255,
+            shear_range=0.2,
+            zoom_range=0.2,
+            rotation_range=20,
+            width_shift_range=0.2,
+            height_shift_range=0.2,
+            horizontal_flip=True,
+            brightness_range=[0.8, 1.2],
+            fill_mode='nearest'
+        )
 
-        # Load the saved model
-        model = tensorflow.keras.models.load_model(ViewPointElevationPrediction.model_path)
+        # Create a data generator with additional augmentation
+        train_generator = train_datagen.flow(
+            np.array(images),
+            np.array(verdicts),
+            batch_size=BATCH_SIZE,
+            shuffle=True
+        )
 
-        # Remove the last layer (output layer) to match the original model architecture
-        model.pop()
+        # Fine-tune the existing model with the user feedback data.
+        optimizer = Adam(learning_rate=0.0001)
 
-        # Retrain the model with binary cross-entropy
-        model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
-        model.fit(new_images, new_labels, epochs=20, validation_split=0.2)  # You can adjust the validation split
+        # Implement learning rate schedule to reduce learning rate during training
+        def learning_rate_schedule(epoch, lr):
+            if epoch < 20:
+                return lr
+            else:
+                return lr * 0.1
 
-        # Save the retrained model
+        learning_rate_scheduler = LearningRateScheduler(learning_rate_schedule)
+
+        model.compile(optimizer=optimizer, loss='categorical_crossentropy', metrics=['accuracy'])
+
+        # Create a separate validation data generator
+        val_datagen = ImageDataGenerator(rescale=1. / 255)
+        val_generator = val_datagen.flow(
+            np.array(images),
+            np.array(verdicts),
+            batch_size=BATCH_SIZE,
+            shuffle=True
+        )
+
+        # Implement early stopping and learning rate reduction on plateau
+        callbacks = [
+            EarlyStopping(patience=10, restore_best_weights=True),  # Increased patience
+            ReduceLROnPlateau(factor=0.1, patience=5)  # Increased patience
+        ]
+
+        # Train the model with user feedback data using separate training and validation generators
+        model.fit(
+            train_generator,
+            epochs=50,
+            validation_data=val_generator,  # Use separate validation data generator
+            callbacks=callbacks + [learning_rate_scheduler],  # Include learning rate schedule
+            shuffle=True  # Shuffle training data
+        )
+
+        # Save the retrained model.
         model.save(ViewPointElevationPrediction.model_path)
-        print("VIEW: Model is retrained")
 
-    # @staticmethod
-    # def retrain_model(processed_images):
-    #     images = []  # List to store preprocessed images
-    #     verdicts = []  # List to store corresponding labels
-    #
-    #     for image in processed_images:
-    #         image_data = image.image_for_processing
-    #         label = image.verdict_scene
-    #
-    #         # Convert the image data to a PIL image
-    #         pil_image = Image.open(io.BytesIO(image_data)).convert("RGB")
-    #
-    #         # Resize the image to the desired dimensions (IMG_WIDTH, IMG_HEIGHT)
-    #         pil_image = pil_image.resize((IMG_WIDTH, IMG_HEIGHT))
-    #
-    #         # Convert the PIL image to a numpy array
-    #         np_image = np.array(pil_image)
-    #
-    #         # Normalize the image data
-    #         np_image = np_image.astype('float32') / 255.0
-    #
-    #         images.append(np_image)
-    #         verdicts.append(label)
-    #
-    #     # Load the existing model or use the one you've already trained.
-    #     model = ScenePrediction.model
-    #
-    #     # You can fine-tune the existing model with the user feedback data.
-    #     train_datagen = ImageDataGenerator(
-    #         rescale=1. / 255,
-    #         shear_range=0.2,
-    #         zoom_range=0.2,
-    #         rotation_range=20,
-    #         width_shift_range=0.2,
-    #         height_shift_range=0.2,
-    #         horizontal_flip=True
-    #     )
-    #     train_generator = train_datagen.flow(np.array(images), np.array(verdicts), batch_size=BATCH_SIZE)
-    #
-    #     # Re-compile the model if needed (you may adjust the learning rate or other hyperparameters).
-    #     optimizer = Adam(learning_rate=0.001)
-    #     model.compile(optimizer=optimizer, loss='binary_crossentropy', metrics=['accuracy'])
-    #
-    #     # Train the model with user feedback data.
-    #     model.fit(train_generator, epochs=20)
-    #
-    #     # Save the retrained model.
-    #     model.save(ScenePrediction.model_path)
-    #
-    #     print("Model retraining complete.")
-
-    @staticmethod
-    def retrain_model(processed_images):
-        # images = []  # List to store preprocessed images
-        # verdicts = []  # List to store corresponding labels
-        #
-        # for image in processed_images:
-        #     image_data = image.image_for_processing
-        #     label = image.verdict_scene
-        #
-        #     # Convert the image data to a PIL image
-        #     pil_image = Image.open(io.BytesIO(image_data)).convert("RGB")
-        #
-        #     # Resize the image to the desired dimensions (IMG_WIDTH, IMG_HEIGHT)
-        #     pil_image = pil_image.resize((IMG_WIDTH, IMG_HEIGHT))
-        #
-        #     # Convert the PIL image to a numpy array
-        #     np_image = np.array(pil_image)
-        #
-        #     # Normalize the image data
-        #     np_image = np_image.astype('float32') / 255.0
-        #
-        #     images.append(np_image)
-        #     verdicts.append(label)
-        #
-        # # Load the existing model or use the one you've already trained.
-        # model = ScenePrediction.model
-        #
-        # # Use data augmentation during training
-        # train_datagen = ImageDataGenerator(
-        #     rescale=1. / 255,
-        #     shear_range=0.2,
-        #     zoom_range=0.2,
-        #     rotation_range=20,
-        #     width_shift_range=0.2,
-        #     height_shift_range=0.2,
-        #     horizontal_flip=True,
-        #     brightness_range=[0.8, 1.2],
-        #     fill_mode='nearest'
-        # )
-        #
-        # # Create a data generator with additional augmentation
-        # train_generator = train_datagen.flow(
-        #     np.array(images),
-        #     np.array(verdicts),
-        #     batch_size=BATCH_SIZE,
-        #     shuffle=True
-        # )
-        #
-        # # Fine-tune the existing model with the user feedback data.
-        # optimizer = Adam(learning_rate=0.0001)
-        #
-        # # Implement learning rate schedule to reduce learning rate during training
-        # def learning_rate_schedule(epoch, lr):
-        #     if epoch < 20:
-        #         return lr
-        #     else:
-        #         return lr * 0.1
-        #
-        # learning_rate_scheduler = LearningRateScheduler(learning_rate_schedule)
-        #
-        # model.compile(optimizer=optimizer, loss='binary_crossentropy', metrics=['accuracy'])
-        #
-        # # Create a separate validation data generator
-        # val_datagen = ImageDataGenerator(rescale=1. / 255)
-        # val_generator = val_datagen.flow(
-        #     np.array(images),
-        #     np.array(verdicts),
-        #     batch_size=BATCH_SIZE,
-        #     shuffle=True
-        # )
-        #
-        # # Implement early stopping and learning rate reduction on plateau
-        # callbacks = [
-        #     EarlyStopping(patience=10, restore_best_weights=True),  # Increased patience
-        #     ReduceLROnPlateau(factor=0.1, patience=5)  # Increased patience
-        # ]
-        #
-        # # Train the model with user feedback data using separate training and validation generators
-        # model.fit(
-        #     train_generator,
-        #     epochs=50,
-        #     validation_data=val_generator,  # Use separate validation data generator
-        #     callbacks=callbacks + [learning_rate_scheduler],  # Include learning rate schedule
-        #     shuffle=True  # Shuffle training data
-        # )
-        #
-        # # Save the retrained model.
-        # model.save(ScenePrediction.model_path)
-
-        print("Model retraining complete.")
+        print("VIEW: Model retraining complete.")
 
     @staticmethod
     def determine_validation(new_images):

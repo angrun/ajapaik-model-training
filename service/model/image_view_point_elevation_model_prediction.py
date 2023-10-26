@@ -148,6 +148,9 @@ class ViewPointElevationPrediction:
         # Load the existing model or use the one you've already trained.
         model = ViewPointElevationPrediction.model
 
+        # One-hot encode the labels
+        verdicts = to_categorical(verdicts, num_classes=3)
+
         # Use data augmentation during training
         train_datagen = ImageDataGenerator(
             rescale=1. / 255,
@@ -164,7 +167,7 @@ class ViewPointElevationPrediction:
         # Create a data generator with additional augmentation
         train_generator = train_datagen.flow(
             np.array(images),
-            np.array(verdicts),
+            verdicts,  # Use one-hot encoded labels
             batch_size=BATCH_SIZE,
             shuffle=True
         )
@@ -187,7 +190,7 @@ class ViewPointElevationPrediction:
         val_datagen = ImageDataGenerator(rescale=1. / 255)
         val_generator = val_datagen.flow(
             np.array(images),
-            np.array(verdicts),
+            verdicts,  # Use one-hot encoded labels
             batch_size=BATCH_SIZE,
             shuffle=True
         )

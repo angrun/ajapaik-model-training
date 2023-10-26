@@ -2,11 +2,12 @@ import plotly.express as px
 import plotly.io as pio
 
 # Number of total images
-total_images = 2038
+total_images = 3889
 
 # Number of correctly predicted images
 # correct_predictions = 955
-correct_predictions = 1811
+# correct_predictions = 3
+correct_predictions = 3537
 
 # Calculate the accuracy percentage
 accuracy_percentage = (correct_predictions / total_images) * 100
@@ -17,7 +18,7 @@ fig = px.bar(
     y=[correct_predictions, total_images - correct_predictions],
     labels={"x": "Prediction Results", "y": "Number of Images"},
     title=f"Model Image Prediction Accuracy [total] ({accuracy_percentage:.2f}%)",
-    color_discrete_sequence=["#f0b851", "#f0b851"]
+    color_discrete_sequence=["#72cf7e", "#72cf7e"]
 )
 
 # Customize the background color to white

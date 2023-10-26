@@ -22,7 +22,7 @@ def aggregate_and_retrain_model():
         print(f"{IMAGE_AGGREGATION}: Data for retraining fetched successfully\n")
 
         # images_ready_for_processing = ProcessingService.process_images_for_retraining(response.content)
-        processed_images = ProcessingServiceTest.process_images_for_retraining_v3()  # Mock data
+        processed_images = ProcessingServiceTest.process_images_for_retraining_view_v3()  # Mock data
 
         images_ready_for_processing = processed_images[0]
         collected_report = processed_images[1]
@@ -32,17 +32,17 @@ def aggregate_and_retrain_model():
         else:
             print(f"{IMAGE_AGGREGATION}: {len(images_ready_for_processing)} images taken for retraining")
 
-            images_processed_through_data_quality_engine = \
-                DataQuality.exclude_faulty_feedback_v3(images_ready_for_processing)
+            # images_processed_through_data_quality_engine = \
+            #     DataQuality.exclude_faulty_feedback_v3(images_ready_for_processing)
+            #
+            # images_ready_for_processing = images_processed_through_data_quality_engine[0]
+            # images_excluded = images_processed_through_data_quality_engine[1]
+            #
+            # # REPORT
+            # DataQualityValidation.prepare_report(collected_report, images_excluded)
 
-            images_ready_for_processing = images_processed_through_data_quality_engine[0]
-            images_excluded = images_processed_through_data_quality_engine[1]
-
-            # REPORT
-            DataQualityValidation.prepare_report(collected_report, images_excluded)
-
-            print(
-                f"{IMAGE_AGGREGATION}: {len(images_excluded)} feedbacks excluded")
+            # print(
+            #     f"{IMAGE_AGGREGATION}: {len(images_excluded)} feedbacks excluded")
             print(
                 f"{IMAGE_AGGREGATION}: {len(images_ready_for_processing)} feedbacks taken for retraining after quality engine")
             ScenePrediction.retrain_model(images_ready_for_processing)

@@ -120,48 +120,48 @@ class ViewPointElevationPrediction:
 
         return predictions
 
-    # @staticmethod
-    # def retrain_model(processed_images):
-    #     new_images = []  # List to store preprocessed images
-    #     new_labels = []  # List to store corresponding labels
-    #
-    #     for image in processed_images:
-    #         image_data = image.image_for_processing
-    #         label = image.verdict_scene
-    #
-    #         # Convert the image data to a PIL image
-    #         pil_image = Image.open(io.BytesIO(image_data)).convert("RGB")
-    #
-    #         # Resize the image to the desired dimensions (IMG_WIDTH, IMG_HEIGHT)
-    #         pil_image = pil_image.resize((IMG_WIDTH, IMG_HEIGHT))
-    #
-    #         # Convert the PIL image to a numpy array
-    #         np_image = np.array(pil_image)
-    #
-    #         # Normalize the image data
-    #         np_image = np_image.astype('float32') / 255.0
-    #
-    #         new_images.append(np_image)
-    #         new_labels.append(label)
-    #
-    #     new_images = np.array(new_images)
-    #     new_labels = np.array(new_labels)
-    #
-    #     num_classes = 1  # Assuming there are 2 classes: interior and exterior
-    #
-    #     # Load the saved model
-    #     model = tensorflow.keras.models.load_model(ScenePrediction.model_path)
-    #
-    #     # Remove the last layer (output layer) to match the original model architecture
-    #     model.pop()
-    #
-    #     # Retrain the model with binary cross-entropy
-    #     model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
-    #     model.fit(new_images, new_labels, epochs=20, validation_split=0.2)  # You can adjust the validation split
-    #
-    #     # Save the retrained model
-    #     model.save(ScenePrediction.model_path)
-    #     print("Model is retrained")
+    @staticmethod
+    def retrain_model(processed_images):
+        new_images = []  # List to store preprocessed images
+        new_labels = []  # List to store corresponding labels
+
+        for image in processed_images:
+            image_data = image.image_for_processing
+            label = image.verdict_scene
+
+            # Convert the image data to a PIL image
+            pil_image = Image.open(io.BytesIO(image_data)).convert("RGB")
+
+            # Resize the image to the desired dimensions (IMG_WIDTH, IMG_HEIGHT)
+            pil_image = pil_image.resize((IMG_WIDTH, IMG_HEIGHT))
+
+            # Convert the PIL image to a numpy array
+            np_image = np.array(pil_image)
+
+            # Normalize the image data
+            np_image = np_image.astype('float32') / 255.0
+
+            new_images.append(np_image)
+            new_labels.append(label)
+
+        new_images = np.array(new_images)
+        new_labels = np.array(new_labels)
+
+        num_classes = 3  # Assuming there are 2 classes: interior and exterior
+
+        # Load the saved model
+        model = tensorflow.keras.models.load_model(ViewPointElevationPrediction.model_path)
+
+        # Remove the last layer (output layer) to match the original model architecture
+        model.pop()
+
+        # Retrain the model with binary cross-entropy
+        model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+        model.fit(new_images, new_labels, epochs=20, validation_split=0.2)  # You can adjust the validation split
+
+        # Save the retrained model
+        model.save(ViewPointElevationPrediction.model_path)
+        print("Model is retrained")
 
     # @staticmethod
     # def retrain_model(processed_images):

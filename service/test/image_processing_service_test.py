@@ -270,3 +270,125 @@ class ProcessingServiceTest:
         print(interior)
 
         return result, collections
+
+    @staticmethod
+    def process_images_for_retraining_view_v3():
+        uniqueness_check = []
+
+        THUMB_URL = "http://localhost:8000/"
+        THUMB_PREFIX = "photo-thumb/"
+        image_id_aerial_from = random.randint(1, 1019)
+        image_id_interior_from = random.randint(1020, 2038)
+        user_id = random.randint(1, 100)
+        counter = 0
+
+        result = []
+        collections = {}
+
+        ground = {"ground_correct": 0, "ground_wrong": 0}
+        raised = {"raised_correct": 0, "raised_wrong": 0}
+        aerial = {"aerial_correct": 0, "aerial_wrong": 0}
+        
+        while counter != 500:
+            image_id_aerial_from = random.randint(1, 33)
+            user_id = random.randint(1, 100)
+            try:
+                # Ensure only 1 feedback per image from a user
+                if [user_id, image_id_aerial_from] in uniqueness_check:
+                    print("AERIAL: Uniqueness break")
+                    continue
+                else:
+                    uniqueness_check.append([user_id, image_id_aerial_from])
+
+                url = f"{THUMB_URL}{THUMB_PREFIX}{image_id_aerial_from}"
+                with urllib.request.urlopen(url) as url_response:
+                    img_data = url_response.read()
+                    verdict_to_aerial = random.randint(0, 2)
+                    #
+                    # handle_processed_image(collections, "exterior", image_id_aerial_from,
+                    #                        "exterior" if verdict_to_aerial == 1 else "interior")
+
+                    if verdict_to_aerial in [0, 1]:
+                        aerial["aerial_wrong"] = aerial["aerial_wrong"] + 1
+                    else:
+                        aerial["aerial_correct"] = aerial["aerial_correct"] + 1
+                    result.append(
+                        ProcessingImage(user_id, image_id_aerial_from, img_data, verdict_view_point_elevation=verdict_to_aerial))
+            except Exception as e:
+                print(e)
+                print("EXCEPTION")
+            counter += 1
+
+        print(aerial)
+
+        counter = 0
+
+        while counter != 500:
+            image_id_raised_from = random.randint(34, 335)
+            user_id = random.randint(1, 100)
+            try:
+                # Ensure only 1 feedback per image from a user
+                if [user_id, image_id_raised_from] in uniqueness_check:
+                    print("RAISED: Uniqueness break")
+                    continue
+                else:
+                    uniqueness_check.append([user_id, image_id_raised_from])
+
+                url = f"{THUMB_URL}{THUMB_PREFIX}{image_id_raised_from}"
+                with urllib.request.urlopen(url) as url_response:
+                    img_data = url_response.read()
+                    verdict_to_raised = random.randint(0, 2)
+                    #
+                    # handle_processed_image(collections, "exterior", image_id_aerial_from,
+                    #                        "exterior" if verdict_to_aerial == 1 else "interior")
+
+                    if verdict_to_raised in [0, 2]:
+                        raised["raised_wrong"] = raised["raised_wrong"] + 1
+                    else:
+                        raised["raised_correct"] = raised["raised_correct"] + 1
+                    result.append(
+                        ProcessingImage(user_id, image_id_raised_from, img_data, verdict_view_point_elevation=verdict_to_raised))
+            except Exception as e:
+                print(e)
+                print("EXCEPTION")
+            counter += 1
+
+        print(raised)
+
+        counter = 0
+
+        while counter != 500:
+            image_id_ground_from = random.randint(336, 3891)
+            user_id = random.randint(1, 100)
+            try:
+                # Ensure only 1 feedback per image from a user
+                if [user_id, image_id_ground_from] in uniqueness_check:
+                    print("GROUND: Uniqueness break")
+                    continue
+                else:
+                    uniqueness_check.append([user_id, image_id_ground_from])
+
+                url = f"{THUMB_URL}{THUMB_PREFIX}{image_id_ground_from}"
+                with urllib.request.urlopen(url) as url_response:
+                    img_data = url_response.read()
+                    verdict_to_ground = random.randint(0, 2)
+                    #
+                    # handle_processed_image(collections, "exterior", image_id_aerial_from,
+                    #                        "exterior" if verdict_to_aerial == 1 else "interior")
+
+                    if verdict_to_ground in [1, 2]:
+                        ground["ground_wrong"] = ground["ground_wrong"] + 1
+                    else:
+                        ground["ground_correct"] = ground["ground_correct"] + 1
+                    result.append(
+                        ProcessingImage(user_id, image_id_ground_from, img_data,
+                                        verdict_view_point_elevation=verdict_to_ground))
+            except Exception as e:
+                print(e)
+                print("EXCEPTION")
+            counter += 1
+
+        print(ground)
+
+        return result, collections
+

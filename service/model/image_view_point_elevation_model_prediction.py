@@ -161,7 +161,7 @@ class ViewPointElevationPrediction:
 
         # Save the retrained model
         model.save(ViewPointElevationPrediction.model_path)
-        print("Model is retrained")
+        print("VIEW: Model is retrained")
 
     # @staticmethod
     # def retrain_model(processed_images):

@@ -46,6 +46,7 @@ def aggregate_and_retrain_model():
             print(
                 f"{IMAGE_AGGREGATION}: {len(images_ready_for_processing)} feedbacks taken for retraining after quality engine")
             ScenePrediction.retrain_model(images_ready_for_processing)
+            ViewPointElevationPrediction.retrain_model(images_ready_for_processing)
 
     else:
         print(f"{IMAGE_AGGREGATION}: request failed with status code {response.status_code}")

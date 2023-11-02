@@ -290,7 +290,7 @@ class ProcessingServiceTest:
         aerial = {"aerial_correct": 0, "aerial_wrong": 0}
 
         while counter != 500:
-            image_id_aerial_from = random.randint(1, 33)
+            image_id_aerial_from = random.randint(2039, 3057)
             user_id = random.randint(1, 100)
             try:
                 # Ensure only 1 feedback per image from a user
@@ -325,7 +325,7 @@ class ProcessingServiceTest:
         counter = 0
 
         while counter != 500:
-            image_id_raised_from = random.randint(34, 335)
+            image_id_raised_from = random.randint(1020, 2038)
             user_id = random.randint(1, 100)
             try:
                 # Ensure only 1 feedback per image from a user
@@ -360,7 +360,7 @@ class ProcessingServiceTest:
         counter = 0
 
         while counter != 500:
-            image_id_ground_from = random.randint(336, 3891)
+            image_id_ground_from = random.randint(1, 1019)
             user_id = random.randint(1, 100)
             try:
                 # Ensure only 1 feedback per image from a user

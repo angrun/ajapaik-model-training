@@ -303,7 +303,7 @@ class ProcessingServiceTest:
                 url = f"{THUMB_URL}{THUMB_PREFIX}{image_id_aerial_from}"
                 with urllib.request.urlopen(url) as url_response:
                     img_data = url_response.read()
-                    verdict_to_aerial = random.randint(0, 2)
+                    verdict_to_aerial = random.randint(1, 2)
                     #
                     # handle_processed_image(collections, "exterior", image_id_aerial_from,
                     #                        "exterior" if verdict_to_aerial == 1 else "interior")
@@ -338,7 +338,7 @@ class ProcessingServiceTest:
                 url = f"{THUMB_URL}{THUMB_PREFIX}{image_id_raised_from}"
                 with urllib.request.urlopen(url) as url_response:
                     img_data = url_response.read()
-                    verdict_to_raised = random.randint(0, 2)
+                    verdict_to_raised = random.randint(1, 2)
                     #
                     # handle_processed_image(collections, "exterior", image_id_aerial_from,
                     #                        "exterior" if verdict_to_aerial == 1 else "interior")
@@ -373,7 +373,7 @@ class ProcessingServiceTest:
                 url = f"{THUMB_URL}{THUMB_PREFIX}{image_id_ground_from}"
                 with urllib.request.urlopen(url) as url_response:
                     img_data = url_response.read()
-                    verdict_to_ground = random.randint(0, 2)
+                    verdict_to_ground = random.randint(0, 1)
                     #
                     # handle_processed_image(collections, "exterior", image_id_aerial_from,
                     #                        "exterior" if verdict_to_aerial == 1 else "interior")

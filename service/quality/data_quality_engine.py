@@ -18,7 +18,7 @@ class DataQuality:
 
     # Version 1
     @staticmethod
-    def exclude_faulty_feedback_v1(user_feedback):
+    def exclude_faulty_feedback_scene_v1(user_feedback):
         verdict_counts_per_image = defaultdict(Counter)
 
         for feedback in user_feedback:
@@ -48,6 +48,40 @@ class DataQuality:
         print(f"DATA CLEAN UP PERFORMED, REMOVED {len(removed_feedback)}")
         print(f"DATA CLEAN UP PERFORMED, CONSIDERING {len(cleanup_feedback)}")
         return cleanup_feedback, removed_feedback
+
+
+    @staticmethod
+    def exclude_faulty_feedback_view_point_elevation_v1(user_feedback):
+        verdict_counts_per_image = defaultdict(Counter)
+
+        for feedback in user_feedback:
+            image_id = feedback.image_id
+            verdict = feedback.verdict_view_point_elevation
+            verdict_counts_per_image[image_id][verdict] += 1
+
+        most_common_verdicts = {}
+        for image_id, verdict_counts in verdict_counts_per_image.items():
+            most_common_verdicts[image_id] = verdict_counts.most_common(1)[0][0]
+
+        print("MOST COMMON VERDICTS")
+        print(most_common_verdicts)
+
+        cleanup_feedback = []
+        removed_feedback = []
+        for feedback in user_feedback:
+            if most_common_verdicts[feedback.image_id] == feedback.verdict_view_point_elevation:
+                print("===")
+                print(most_common_verdicts[feedback.image_id])
+                print(feedback.verdict_view_point_elevation)
+                cleanup_feedback.append(feedback)
+            else:
+                print("REMOVED FEEDBACK: " + str(feedback))
+                removed_feedback.append(feedback)
+
+        print(f"DATA CLEAN UP PERFORMED, REMOVED {len(removed_feedback)}")
+        print(f"DATA CLEAN UP PERFORMED, CONSIDERING {len(cleanup_feedback)}")
+        return cleanup_feedback, removed_feedback
+
 
     @staticmethod
     def exclude_faulty_feedback_v2(feedback_data):

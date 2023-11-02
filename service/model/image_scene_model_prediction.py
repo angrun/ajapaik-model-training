@@ -158,6 +158,7 @@ class ScenePrediction:
         ScenePrediction.model.fit(new_images, new_labels, epochs=20,
                                   validation_split=ScenePrediction.determine_validation(new_images))
 
+
         # Save the retrained model
         ScenePrediction.model.save(ScenePrediction.model_path)
         print("Model is retrained")

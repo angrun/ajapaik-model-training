@@ -145,8 +145,9 @@ class ViewPointElevationPrediction:
             images.append(np_image)
             verdicts.append(label)
 
-        # Load the existing model or use the one you've already trained.
-        model = ViewPointElevationPrediction.model
+        # Load the existing model1 or use the one you've already trained.
+        model1 = ViewPointElevationPrediction.model
+        print(f"MODEL IS: {model1}")
 
         # One-hot encode the labels
         verdicts = to_categorical(verdicts, num_classes=3)
@@ -172,7 +173,7 @@ class ViewPointElevationPrediction:
             shuffle=True
         )
 
-        # Fine-tune the existing model with the user feedback data.
+        # Fine-tune the existing model1 with the user feedback data.
         optimizer = Adam(learning_rate=0.0001)
 
         # Implement learning rate schedule to reduce learning rate during training
@@ -184,7 +185,7 @@ class ViewPointElevationPrediction:
 
         learning_rate_scheduler = LearningRateScheduler(learning_rate_schedule)
 
-        model.compile(optimizer=optimizer, loss='categorical_crossentropy', metrics=['accuracy'])
+        model1.compile(optimizer=optimizer, loss='categorical_crossentropy', metrics=['accuracy'])
 
         # Create a separate validation data generator
         val_datagen = ImageDataGenerator(rescale=1. / 255)
@@ -201,8 +202,8 @@ class ViewPointElevationPrediction:
             ReduceLROnPlateau(factor=0.1, patience=5)  # Increased patience
         ]
 
-        # Train the model with user feedback data using separate training and validation generators
-        model.fit(
+        # Train the model1 with user feedback data using separate training and validation generators
+        model1.fit(
             train_generator,
             epochs=50,
             validation_data=val_generator,  # Use separate validation data generator
@@ -210,8 +211,8 @@ class ViewPointElevationPrediction:
             shuffle=True  # Shuffle training data
         )
 
-        # Save the retrained model.
-        model.save(ViewPointElevationPrediction.model_path)
+        # Save the retrained model1.
+        model1.save(ViewPointElevationPrediction.model_path)
 
         print("VIEW: Model retraining complete.")
 

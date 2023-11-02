@@ -43,17 +43,19 @@ def aggregate_and_retrain_model():
 
             print(
                 f"{IMAGE_AGGREGATION}: {len(images_excluded)} feedbacks excluded")
-            print(
-                f"{IMAGE_AGGREGATION}: {len(images_ready_for_processing)} feedbacks taken for retraining after quality engine")
-            ScenePrediction.retrain_model(images_ready_for_processing)
-            ViewPointElevationPrediction.retrain_model(images_ready_for_processing)
+
+            if images_ready_for_processing:
+                print(
+                    f"{IMAGE_AGGREGATION}: {len(images_ready_for_processing)} feedbacks taken for retraining after quality engine")
+                ScenePrediction.retrain_model(images_ready_for_processing)
+                ViewPointElevationPrediction.retrain_model(images_ready_for_processing)
 
     else:
         print(f"{IMAGE_AGGREGATION}: request failed with status code {response.status_code}")
 
 
 def categorize_uncategorized_images():
-    print("get-uncategorized-images: Getting uncategorized images\n")
+    print(f"{UNCATEGORIZED_IMAGES}: Getting uncategorized images\n")
 
     response = requests.get(URL + 'object-categorization/get-uncategorized-images')
     if response.status_code == 200:

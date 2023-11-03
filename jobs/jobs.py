@@ -32,17 +32,17 @@ def aggregate_and_retrain_model():
         else:
             print(f"{IMAGE_AGGREGATION}: {len(images_ready_for_processing)} images taken for retraining")
 
-            # images_processed_through_data_quality_engine = \
-            #     DataQuality.exclude_faulty_feedback_view_point_elevation_v1(images_ready_for_processing)
-            #
-            # images_ready_for_processing = images_processed_through_data_quality_engine[0]
-            # images_excluded = images_processed_through_data_quality_engine[1]
+            images_processed_through_data_quality_engine = \
+                DataQuality.exclude_faulty_feedback_view_point_elevation_v2(images_ready_for_processing)
+
+            images_ready_for_processing = images_processed_through_data_quality_engine[0]
+            images_excluded = images_processed_through_data_quality_engine[1]
             #
             # # REPORT
             # DataQualityValidation.prepare_report(collected_report, images_excluded)
 
-            # print(
-            #     f"{IMAGE_AGGREGATION}: {len(images_excluded)} feedbacks excluded")
+            print(
+                f"{IMAGE_AGGREGATION}: {len(images_excluded)} feedbacks excluded")
 
             print(
                 f"{IMAGE_AGGREGATION}: {len(images_ready_for_processing)} feedbacks taken for retraining after quality engine")

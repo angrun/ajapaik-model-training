@@ -11,7 +11,7 @@ total_images = 100
 # correct_predictions = 3100 + 2500 + 2100
 # correct_predictions = 305
 # correct_predictions = 285
-correct_predictions = 34.27
+correct_predictions = 43.03
 
 # Calculate the accuracy percentage
 accuracy_percentage = (correct_predictions / total_images) * 100
@@ -22,8 +22,8 @@ fig = px.bar(
     y=[correct_predictions, total_images - correct_predictions],
     labels={"x": "Prediction Results", "y": "Number of Images"},
     title=f"Model Image Prediction Accuracy [total] ({accuracy_percentage:.2f}%)",
-    color_discrete_sequence=["#72cf7e", "#72cf7e"]
-    # color_discrete_sequence=["#f0b851", "#f0b851"]
+    # color_discrete_sequence=["#72cf7e", "#72cf7e"]
+    color_discrete_sequence=["#f0b851", "#f0b851"]
 )
 
 # Customize the background color to white

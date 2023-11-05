@@ -1,6 +1,7 @@
 import io
 import os
 import tensorflow
+from keras.src.applications import ResNet50
 from keras.src.callbacks import LearningRateScheduler
 # from keras.src.callbacks import LearningRateScheduler
 from tensorflow.keras.utils import to_categorical
@@ -73,7 +74,7 @@ class ViewPointElevationPrediction:
                 classes=['ground', 'raised', 'aerial']  # Modify to your category names
             )
 
-            base_model = MobileNetV2(weights='imagenet', include_top=False, input_shape=(IMG_WIDTH, IMG_HEIGHT, 3))
+            base_model = ResNet50(weights='imagenet', include_top=False, input_shape=(IMG_WIDTH, IMG_HEIGHT, 3))
             base_model.trainable = False
 
             model = Sequential([

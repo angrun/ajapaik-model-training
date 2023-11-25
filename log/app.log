@@ -1388,3 +1388,17 @@
 2023-08-26 13:23:35,531 django.utils.autoreload INFO     Watching for file changes with StatReloader
 2023-08-26 13:25:01,231 django.utils.autoreload INFO     /Users/annagrund/PycharmProjects/ajapaik-model-training/service/test/image_processing_service_test.py changed, reloading.
 2023-08-26 13:28:47,448 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-11-25 19:23:19,789 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-11-25 19:24:21,481 django.utils.autoreload INFO     /Users/annagrund/PycharmProjects/ajapaik-model-training/service/model/image_scene_model_prediction.py changed, reloading.
+2023-11-25 19:24:22,962 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-11-25 19:24:55,294 django.utils.autoreload INFO     /Users/annagrund/PycharmProjects/ajapaik-model-training/service/model/image_view_point_elevation_model_prediction.py changed, reloading.
+2023-11-25 19:24:55,849 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-11-25 19:25:23,792 django.utils.autoreload INFO     /Users/annagrund/PycharmProjects/ajapaik-model-training/service/model/image_view_point_elevation_model_prediction.py changed, reloading.
+2023-11-25 19:25:24,313 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-11-25 19:25:49,419 django.utils.autoreload INFO     /Users/annagrund/PycharmProjects/ajapaik-model-training/service/model/image_view_point_elevation_model_prediction.py changed, reloading.
+2023-11-25 19:25:49,965 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-11-25 19:27:20,876 django.utils.autoreload INFO     /Users/annagrund/PycharmProjects/ajapaik-model-training/service/model/image_scene_model_prediction.py changed, reloading.
+2023-11-25 19:27:21,682 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-11-25 19:44:14,301 django.utils.autoreload INFO     /Users/annagrund/PycharmProjects/ajapaik-model-training/service/model/image_scene_model_prediction.py changed, reloading.
+2023-11-25 19:44:15,291 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-11-25 19:44:27,982 django.utils.autoreload INFO     Watching for file changes with StatReloader

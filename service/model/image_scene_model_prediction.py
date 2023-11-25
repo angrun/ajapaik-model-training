@@ -1,7 +1,8 @@
 import io
 import os
 import tensorflow
-from keras.src.applications import ResNet50
+from keras.applications import ResNet50
+from matplotlib import pyplot as plt
 # from keras.src.callbacks import LearningRateScheduler
 from tensorflow.keras.utils import to_categorical
 
@@ -46,7 +47,6 @@ class ScenePrediction:
             print("loading model from cache")
             ScenePrediction.model = load_model(ScenePrediction.model_path)
         else:
-
             train_datagen = ImageDataGenerator(
                 rescale=1. / 255,
                 shear_range=0.2,
@@ -93,7 +93,17 @@ class ScenePrediction:
                 ReduceLROnPlateau(factor=0.1, patience=2)
             ]
 
-            model.fit(train_generator, epochs=20, validation_data=val_generator, callbacks=callbacks)
+            history = model.fit(train_generator, epochs=20, validation_data=val_generator, callbacks=callbacks)
+
+            # Plot the training and validation loss over epochs
+            plt.plot(history.history['loss'], label='Training Loss')
+            plt.plot(history.history['val_loss'], label='Validation Loss')
+            plt.xlabel('Epochs')
+            plt.ylabel('Loss')
+            plt.legend()
+            plt.show()
+            plt.savefig("save.png")
+
             ScenePrediction.model = model
             ScenePrediction.model.save(ScenePrediction.model_path)
 

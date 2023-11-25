@@ -1,8 +1,9 @@
 import io
 import os
 import tensorflow
-from keras.src.applications import ResNet50
-from keras.src.callbacks import LearningRateScheduler
+from keras.applications import ResNet50
+from keras.callbacks import LearningRateScheduler
+# from keras.src.callbacks import LearningRateScheduler
 # from keras.src.callbacks import LearningRateScheduler
 from tensorflow.keras.utils import to_categorical
 

@@ -25,5 +25,5 @@ urlpatterns = [
 ]
 
 ScenePrediction.model_start_up()
-ViewPointElevationPrediction.model_start_up()
+# ViewPointElevationPrediction.model_start_up()
 updater.start()

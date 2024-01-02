@@ -36,8 +36,8 @@ class ProcessingService:
             for entry in alternative_data:
                 user_id = entry['fields']['proposer']
                 image_id = entry['fields']['photo']
-                scene_alternation = entry['fields']['scene_alternation']
-                viewpoint_elevation_alternation = entry['fields']['viewpoint_elevation_alternation']
+                scene_alternation = entry['fields']['scene']
+                viewpoint_elevation_alternation = entry['fields']['viewpoint_elevation']
 
                 url = f"{THUMB_URL}{THUMB_PREFIX}{image_id}"
                 with urllib.request.urlopen(url) as url_response:

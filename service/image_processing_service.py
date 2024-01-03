@@ -7,6 +7,7 @@ THUMB_PREFIX = "photo-thumb/"
 RESULT_PREFIX = "object-categorization/publish-picture-category-result/"
 HEADERS = {"Content-Type": "application/json"}
 DECISION_RATE = 0.5
+CATEGORY_PREDICTION = "CATEGORY_PREDICTION"
 
 
 class ProcessingService:
@@ -17,7 +18,6 @@ class ProcessingService:
         for image in image_payload:
             image_id = image[0]
             user_id = image[1]
-            image_url = image[2]
             url = f"{THUMB_URL}{THUMB_PREFIX}{image_id}"
             with urllib.request.urlopen(url) as url_response:
                 img_data = url_response.read()
@@ -36,24 +36,34 @@ class ProcessingService:
             for entry in alternative_data:
                 user_id = entry['fields']['proposer']
                 image_id = entry['fields']['photo']
-                scene_alternative = entry['fields']['scene_alternation']
+                scene_alternation = entry['fields']['scene']
+                viewpoint_elevation_alternation = entry['fields']['viewpoint_elevation']
+
                 url = f"{THUMB_URL}{THUMB_PREFIX}{image_id}"
                 with urllib.request.urlopen(url) as url_response:
                     img_data = url_response.read()
                     processed_images.append(
-                        ProcessingImage(user_id, image_id, img_data, verdict_scene=scene_alternative))
+                        ProcessingImage(user_id, image_id, img_data, verdict_scene=scene_alternation,
+                                        verdict_view_point_elevation=viewpoint_elevation_alternation))
         return processed_images
 
     @staticmethod
-    def prepare_prediction_for_final_verdict(processed_image, prediction_result):
-        filtered_d = {k: v for k, v in prediction_result.items() if v > DECISION_RATE}
+    def prepare_prediction_for_final_verdict(processed_image, scene_prediction_result, view_prediction_result):
+        # SCENE
+        filtered_d = {k: v for k, v in scene_prediction_result.items() if v > DECISION_RATE}
         if filtered_d:
             processed_image.verdict_scene = max(filtered_d, key=filtered_d.get)
+
+        # VIEW
+        print("PREDICTION")
+        print(view_prediction_result)
+        view_verdict = max(view_prediction_result, key=view_prediction_result.get)
+        category_labels = {'ground': 0, 'raised': 1, 'aerial': 2}
+        processed_image.verdict_view_point_elevation = category_labels[view_verdict]
         return processed_image
 
-    # TODO: to do it in batch mode
     @staticmethod
-    def batch_to_result_table(processed_image):
+    def post_model_predictions_to_result_table(processed_image):
         payload = {
             "photo_id": processed_image.image_id,
         }
@@ -66,9 +76,9 @@ class ProcessingService:
         response = requests.post(f"{THUMB_URL}{RESULT_PREFIX}", json=payload, headers=HEADERS)
 
         if response.status_code == 200:
-            print("get-uncategorized-images: success posting categories for uncategorized images\n")
+            print(f"{CATEGORY_PREDICTION}: success posting categories for uncategorized images\n")
         else:
-            print(f"Error: {response.status_code} - {response.text}")
+            print(f"{CATEGORY_PREDICTION}: error: {response.status_code} - {response.text}")
 
 
 class ProcessingImage:
@@ -80,7 +90,10 @@ class ProcessingImage:
         self.verdict_view_point_elevation = verdict_view_point_elevation
 
     def __str__(self):
-        return f'[user_id: {self.user_id}, image_id: {self.image_id}, verdict_scene: {self.verdict_scene}]'
+        return f'[user_id: {self.user_id}, ' \
+               f'image_id: {self.image_id}, ' \
+               f'verdict_scene: {self.verdict_scene}' \
+               f'verdict_viewpoint_elevation: {self.verdict_view_point_elevation}]'
 
     def __repr__(self):
         return self.__str__()

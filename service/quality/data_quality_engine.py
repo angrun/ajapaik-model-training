@@ -1,60 +1,88 @@
-from datetime import datetime
+import urllib.request
 
-from sklearn.ensemble import IsolationForest
-from sklearn.preprocessing import StandardScaler
+import numpy as np
+
+from io import BytesIO
+from PIL import Image
+from keras.utils import img_to_array
+
+from service.model.image_scene_model_prediction import ScenePrediction
+from service.model.image_view_point_elevation_model_prediction import ViewPointElevationPrediction
+
+IMG_WIDTH, IMG_HEIGHT = 224, 224
+THUMB_URL = "http://localhost:8000/"
+THUMB_PREFIX = "photo-thumb/"
 
 
 class DataQuality:
 
     @staticmethod
-    def exclude_faulty_feedback(feedback_data):
-        user_data = {}
-        for entry in feedback_data:
-            user_id = entry.user_id
-            if user_id not in user_data:
-                user_data[user_id] = {'verdict_scene_0_count': 0, 'verdict_scene_1_count': 0}
-            if entry.verdict_scene == 0:
-                user_data[user_id]['verdict_scene_0_count'] += 1
+    def exclude_faulty_feedback_scene_v3(feedback_data):
+        faulty_feedbacks = []
+        cleanup_data = []
+        for feedback in feedback_data:
+            model_prediction = DataQuality.get_image_prediction_scene(feedback.image_id)
+            if feedback.verdict_scene != model_prediction:
+                faulty_feedbacks.append(feedback)
             else:
-                user_data[user_id]['verdict_scene_1_count'] += 1
+                cleanup_data.append(feedback)
+        return cleanup_data, faulty_feedbacks
 
-        # Create features for anomaly detection
-        features = []
-        for user_id, counts in user_data.items():
-            ratio = counts['verdict_scene_1_count'] / (
-                    counts['verdict_scene_0_count'] + counts['verdict_scene_1_count'])
-            features.append([ratio])
+    @staticmethod
+    def get_image_prediction_scene(image_id):
+        model_prediction = 1
+        url = f"{THUMB_URL}{THUMB_PREFIX}{image_id}"
+        with urllib.request.urlopen(url) as url_response:
+            img_data = url_response.read()
 
-        # Standardize features
-        scaler = StandardScaler()
-        scaled_features = scaler.fit_transform(features)
+            image = Image.open(BytesIO(img_data))
 
-        # Apply Isolation Forest for anomaly detection
-        clf = IsolationForest(contamination=0.05)  # Adjust contamination based on your dataset
-        clf.fit(scaled_features)
+            image = image.resize((IMG_WIDTH, IMG_HEIGHT))
+            image_array = img_to_array(image)
 
-        # Identify users with potentially faulty feedback
-        faulty_users = set()
-        for i, prediction in enumerate(clf.predict(scaled_features)):
-            if prediction == -1:
-                faulty_users.add(list(user_data.keys())[i])
+            image_array = image_array / 255.0
+            image_array = np.expand_dims(image_array, axis=0)
 
-        faulty_feedback = []
-        cleaned_feedback = []
-        timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        report_lines = [f"Report generated at: {timestamp}\n\n"]
+            class_probabilities = ScenePrediction.model.predict(image_array)[0][0]
 
-        for entry in feedback_data:
-            if entry.user_id not in faulty_users:
-                cleaned_feedback.append(entry)
+            predictions = {0: 1 - class_probabilities, 1: class_probabilities}
+            if predictions[0] > predictions[1]:
+                model_prediction = 0
+            return model_prediction
+
+    @staticmethod
+    def exclude_faulty_feedback_viewpoint_elevation_v3(feedback_data):
+        faulty_feedbacks = []
+        cleanup_data = []
+        for feedback in feedback_data:
+            model_prediction = DataQuality.get_image_prediction_viewpoint_elevation(feedback.image_id)
+            if feedback.verdict_view_point_elevation != model_prediction:
+                faulty_feedbacks.append(feedback)
             else:
-                faulty_feedback.append(entry)
-                anomaly_value = clf.decision_function([scaled_features[i]])[0]  # Get anomaly value
-                report_lines.append(f"Excluded data: {entry}, Anomaly value: {anomaly_value}\n")
+                cleanup_data.append(feedback)
+        return cleanup_data, faulty_feedbacks
 
-        report_filename = f"reports/exclusion_report_{timestamp.replace(' ', '_').replace(':', '-')}.txt"
-        with open(report_filename, 'w') as report_file:
-            report_file.writelines(report_lines)
+    @staticmethod
+    def get_image_prediction_viewpoint_elevation(image_id):
+        url = f"{THUMB_URL}{THUMB_PREFIX}{image_id}"
+        with urllib.request.urlopen(url) as url_response:
+            img_data = url_response.read()
 
-        print(f"aggregate-category-data: Finished data quality engine, removed {len(faulty_feedback)} faulty records")
-        return cleaned_feedback
+            image = Image.open(BytesIO(img_data))
+
+            image = image.resize((IMG_WIDTH, IMG_HEIGHT))
+            image_array = img_to_array(image)
+
+            image_array = image_array / 255.0
+            image_array = np.expand_dims(image_array, axis=0)
+
+            class_probabilities = ViewPointElevationPrediction.model.predict(image_array)[0]
+            probabilities_sum = np.sum(np.exp(class_probabilities))
+            normalized_probabilities = np.exp(class_probabilities) / probabilities_sum
+
+            category_labels = ['ground', 'raised', 'aerial']
+            predictions = {category_labels[i]: normalized_probabilities[i] for i in
+                           range(len(normalized_probabilities))}
+            view_verdict = max(predictions, key=predictions.get)
+            category_labels = {'ground': 0, 'raised': 1, 'aerial': 2}
+            return category_labels[view_verdict]

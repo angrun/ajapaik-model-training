@@ -18,10 +18,12 @@ from django.urls import path
 
 from jobs import updater
 from service.model.image_scene_model_prediction import ScenePrediction
+from service.model.image_view_point_elevation_model_prediction import ViewPointElevationPrediction
 
 urlpatterns = [
     path('admin/', admin.site.urls),
 ]
 
 ScenePrediction.model_start_up()
+ViewPointElevationPrediction.model_start_up()
 updater.start()

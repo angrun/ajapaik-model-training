@@ -23,7 +23,7 @@ from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau
 from tensorflow.keras.applications import MobileNetV2
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
-VIEW_DIR = 'resources/view_point_elevation'
+VIEW_DIR = 'resources/viewpoint_elevation'
 IMG_WIDTH, IMG_HEIGHT = 224, 224
 BATCH_SIZE = 32
 IMAGE_AGGREGATION = "IMAGE AGGREGATION"

@@ -1,4 +1,7 @@
 /reports
-/resources/
-saved_model.h5
+/resources/scene/*
+/resources/viewpoint_elevation/*
+saved_model_scene.h5
+saved_model_view.h5
 db.sqlite3
+.DS_Store

@@ -1442,3 +1442,7 @@
 2023-11-04 20:54:56,775 django.utils.autoreload INFO     Watching for file changes with StatReloader
 2023-11-05 10:31:22,255 django.utils.autoreload INFO     Watching for file changes with StatReloader
 2023-11-05 10:46:43,413 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2024-01-03 17:57:16,416 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2024-01-03 17:59:39,708 django.utils.autoreload INFO     /Users/annagrund/PycharmProjects/ajapaik-model-training-latest/service/model/image_view_point_elevation_model_prediction.py changed, reloading.
+2024-01-03 17:59:40,502 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2024-01-03 18:00:34,043 django.utils.autoreload INFO     Watching for file changes with StatReloader
